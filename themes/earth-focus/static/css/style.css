@@ -1,0 +1,220 @@
+:root {
+    --bg-color: #fcfbf9; /* Slightly warmer/cleaner paper white */
+    --text-color: #2d2a26; /* Softer black */
+    --accent-color: #556b2f;
+    --code-bg: #f1efeb;
+    --border-color: #e6e2da;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    /* Lora is excellent for screen readability */
+    font-family: 'Lora', serif;
+    line-height: 1.8;
+    max-width: 680px; /* Optimal reading width */
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    font-size: 19px; /* Large, comfortable base size */
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(85, 107, 47, 0.4);
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    background-color: rgba(85, 107, 47, 0.1);
+    border-bottom-color: var(--accent-color);
+}
+
+header {
+    margin-bottom: 5rem;
+    text-align: center; /* Centered header for focus */
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    font-family: 'Patrick Hand', cursive; /* Handwritten menu for "notebook" feel */
+    font-size: 1.2rem;
+}
+
+h1, h2, h3 {
+    font-weight: 600;
+    margin-top: 3rem;
+    line-height: 1.25;
+    color: #1a1a1a;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+h2 {
+    font-size: 1.8rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.meta {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 2rem;
+    display: block;
+}
+
+code {
+    background-color: var(--code-bg);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace; /* Keep Courier for contrast or use Fira if imported */
+    font-size: 0.85em;
+    color: #4a4a4a;
+}
+
+pre {
+    background-color: var(--code-bg);
+    padding: 1.5rem;
+    overflow-x: auto;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    margin: 2rem 0;
+}
+
+blockquote {
+    border-left: none;
+    margin: 2.5rem 0;
+    padding: 0 2rem;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: #4a4a4a;
+    position: relative;
+    text-align: center;
+}
+
+blockquote::before {
+    content: "“";
+    display: block;
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: -1rem;
+    opacity: 0.3;
+}
+
+/* Lists */
+.list-item {
+    margin-bottom: 3rem;
+}
+
+.list-item h2 {
+    margin-bottom: 0.2rem;
+    border: none;
+    padding: 0;
+    font-size: 1.6rem;
+}
+
+/* Enhanced Handwritten Checkbox Style */
+ul {
+  list-style-type: none; /* Remove default bullets */
+  padding-left: 0;
+}
+
+ul li {
+    padding-left: 1.5rem;
+    position: relative;
+    margin-bottom: 0.8rem;
+}
+
+ul li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+}
+
+/* Task lists (Checkboxes) */
+.task-list-item {
+    padding-left: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.task-list-item input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 2px solid #4a4a4a;
+  /* Imperfect square */
+  border-radius: 4px 2px 5px 3px;
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+.task-list-item input[type="checkbox"]:hover {
+    border-color: var(--accent-color);
+    transform: scale(1.05);
+}
+
+.task-list-item input[type="checkbox"]:checked {
+  border-color: var(--accent-color);
+  background-color: rgba(85, 107, 47, 0.15); /* Light green fill */
+}
+
+.task-list-item input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 20%;
+  top: 5%;
+  width: 70%;
+  height: 80%;
+  /* Rough checkmark */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%23556b2f' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.task-list-item::before {
+    content: none; /* Remove bullet for tasks */
+}
+
+/* Observer View Specifics */
+.heatmap {
+    display: flex;
+    gap: 6px;
+    margin-top: 1rem;
+}
+.day-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    border: 2px solid var(--border-color);
+}
+.day-box.done { background-color: var(--accent-color); border-color: var(--accent-color); opacity: 0.8; }
+.day-box.partial { background-color: #dcd8d0; }
+
+footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    text-align: center;
+    color: #aaa;
+    font-family: 'Patrick Hand', cursive;
+}

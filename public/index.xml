@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Welcome on Armagdon Prep</title>
+    <link>http://localhost:3336/</link>
+    <description>Recent content in Welcome on Armagdon Prep</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 31 Oct 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:3336/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>October 2023 Retrospective</title>
+      <link>http://localhost:3336/monthly/oct-2023/</link>
+      <pubDate>Tue, 31 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/monthly/oct-2023/</guid>
+      <description>&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;&#xA;&lt;p&gt;October was a foundational month. The focus was on establishing the &amp;ldquo;STOIC&amp;rdquo; protocol.&lt;/p&gt;&#xA;&lt;h2 id=&#34;data&#34;&gt;Data&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Completion Rate:&lt;/strong&gt; 85%&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Key Habit:&lt;/strong&gt; Morning Ruck&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;adjustments-for-november&#34;&gt;Adjustments for November&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Increasing rucking weight to 45lbs.&lt;/li&gt;&#xA;&lt;li&gt;Adding a dedicated &amp;ldquo;shutdown ritual&amp;rdquo; at 20:00.&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>Weekly Review: Week 43</title>
+      <link>http://localhost:3336/weekly/week-43/</link>
+      <pubDate>Sun, 29 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/weekly/week-43/</guid>
+      <description>&lt;h2 id=&#34;highs&#34;&gt;Highs&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Consistent morning routine (5/7 days)&lt;/li&gt;&#xA;&lt;li&gt;Deep work total: 12 hours&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;lows&#34;&gt;Lows&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Missed Thursday workout&lt;/li&gt;&#xA;&lt;li&gt;Distracted by social media on Tuesday afternoon&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;next-week-focus&#34;&gt;Next Week Focus&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Improve sleep consistency&lt;/li&gt;&#xA;&lt;li&gt;Finish the kernel memory module&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>Deep Work: The Prerequisite</title>
+      <link>http://localhost:3336/philosophy/deep-work/</link>
+      <pubDate>Sat, 28 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/philosophy/deep-work/</guid>
+      <description>Why shallow work is the enemy of progress.</description>
+    </item>
+    <item>
+      <title>Daily Log - 2023-10-27</title>
+      <link>http://localhost:3336/daily/2023-10-27/</link>
+      <pubDate>Fri, 27 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/daily/2023-10-27/</guid>
+      <description>&lt;ul&gt;&#xA;&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Morning Meditation&lt;/li&gt;&#xA;&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Deep Work (2 hours)&lt;/li&gt;&#xA;&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Exercise (Ruck)&lt;/li&gt;&#xA;&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; System Update&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;&lt;em&gt;Focus was high today. Minimal friction.&lt;/em&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Log 001: Foundation</title>
+      <link>http://localhost:3336/discipline/log-001/</link>
+      <pubDate>Fri, 27 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/discipline/log-001/</guid>
+      <description>Establishing the baseline metrics.</description>
+    </item>
+    <item>
+      <title>Observer View</title>
+      <link>http://localhost:3336/observer/</link>
+      <pubDate>Fri, 27 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/observer/</guid>
+      <description>&lt;p&gt;This page is designed for partner visibility. It mirrors the core accountability spreadsheet.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Daily Log - 2023-10-26</title>
+      <link>http://localhost:3336/daily/2023-10-26/</link>
+      <pubDate>Thu, 26 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/daily/2023-10-26/</guid>
+      <description>&lt;ul&gt;&#xA;&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Task A&lt;/li&gt;&#xA;&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Task B&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>The Stoic Morning</title>
+      <link>http://localhost:3336/philosophy/stoic-morning/</link>
+      <pubDate>Thu, 26 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/philosophy/stoic-morning/</guid>
+      <description>Reflections on starting the day with intention.</description>
+    </item>
+    <item>
+      <title>Daily Log - 2023-10-25</title>
+      <link>http://localhost:3336/daily/2023-10-25/</link>
+      <pubDate>Wed, 25 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/daily/2023-10-25/</guid>
+      <description>&lt;ul&gt;&#xA;&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; All done&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>Linux Kernel Memory Management</title>
+      <link>http://localhost:3336/tech/linux-kernel-notes/</link>
+      <pubDate>Wed, 25 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/tech/linux-kernel-notes/</guid>
+      <description>Notes on slab allocators.</description>
+    </item>
+    <item>
+      <title>On Digital Minimalism</title>
+      <link>http://localhost:3336/essays/digital-minimalism/</link>
+      <pubDate>Fri, 20 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/essays/digital-minimalism/</guid>
+      <description>Why we need less noise.</description>
+    </item>
+  </channel>
+</rss>

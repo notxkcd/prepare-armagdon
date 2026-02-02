@@ -1,0 +1,26 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'Armagdon Prep'
+theme = 'earth-focus'
+
+[menus]
+  [[menus.main]]
+    name = 'Philosophy'
+    url = '/philosophy/'
+    weight = 10
+  [[menus.main]]
+    name = 'Daily Logs'
+    url = '/daily/'
+    weight = 20
+  [[menus.main]]
+    name = 'Weekly/Monthly'
+    url = '/weekly/'
+    weight = 30
+  [[menus.main]]
+    name = 'Observer View'
+    url = '/observer/'
+    weight = 40
+  [[menus.main]]
+    name = 'Essays'
+    url = '/essays/'
+    weight = 50

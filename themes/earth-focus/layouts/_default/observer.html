@@ -1,0 +1,47 @@
+{{ define "main" }}
+<article>
+    <header>
+        <h1>{{ .Title }}</h1>
+        <p class="meta">Factual status of the system. Updated daily.</p>
+    </header>
+
+    <section class="observer-summary">
+        <h2>Weekly Consistency</h2>
+        <div class="heatmap">
+            {{ $dailyLogs := (where .Site.RegularPages "Section" "daily") }}
+            {{/* Show last 7 days */}}
+            {{ range first 7 $dailyLogs }}
+                <div class="day-box {{ if eq .Params.status "Complete" }}done{{ else if eq .Params.status "Partial" }}partial{{ else }}empty{{ end }}" 
+                     title="{{ .Date.Format "Monday, Jan 2" }}: {{ .Params.status | default "No Status" }}">
+                </div>
+            {{ else }}
+                <p>No logs found yet.</p>
+            {{ end }}
+        </div>
+        <p style="font-size: 0.9rem; margin-top: 1rem;">
+            <em>Displaying status for the last 7 logged days.</em>
+        </p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Recent Logs</h2>
+        {{ range first 5 $dailyLogs }}
+        <div class="list-item">
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            <span class="meta">{{ .Date.Format "Jan 2, 2006" }} — <strong>{{ .Params.status | default "Logged" }}</strong></span>
+        </div>
+        {{ end }}
+    </section>
+
+    <section class="rules">
+        <h3>Observer Rules</h3>
+        <ul style="font-size: 0.9rem; color: #555;">
+            <li>Purpose: Visibility without micromanagement.</li>
+            <li>Check-in frequency: Sunday mornings recommended.</li>
+            <li>If a day is missed: Assume system friction, not intent.</li>
+        </ul>
+    </section>
+</article>
+{{ end }}

@@ -1,0 +1,20 @@
+{{ define "main" }}
+    {{ if .IsHome }}
+        <section>
+            {{ .Content }}
+        </section>
+        <h2>Recent Notes</h2>
+    {{ else }}
+        <h1>{{ .Title }}</h1>
+    {{ end }}
+
+    <div class="list">
+        {{ range .Pages }}
+        <div class="list-item">
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            <span class="meta">{{ .Date.Format "Jan 2, 2006" }}</span>
+            <p>{{ .Summary }}</p>
+        </div>
+        {{ end }}
+    </div>
+{{ end }}

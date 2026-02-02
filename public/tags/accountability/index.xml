@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Accountability on Armagdon Prep</title>
+    <link>http://localhost:3336/tags/accountability/</link>
+    <description>Recent content in Accountability on Armagdon Prep</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 27 Oct 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:3336/tags/accountability/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Log 001: Foundation</title>
+      <link>http://localhost:3336/discipline/log-001/</link>
+      <pubDate>Fri, 27 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:3336/discipline/log-001/</guid>
+      <description>Establishing the baseline metrics.</description>
+    </item>
+  </channel>
+</rss>
