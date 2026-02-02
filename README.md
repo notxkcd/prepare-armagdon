@@ -34,11 +34,7 @@ All content lives in the `content/` directory.
 ### `content/daily/`
 **What:** Daily logs, checklists, and brief notes.
 **When:** Create one every evening (or morning after).
-**Command:**
-```bash
-./log-today.sh
-```
-**Format:** Automatically generated with your ritual checklist (Salah, Baqarah, Tahajjud).
+**Command:** `./log-today.sh`
 
 ## 3. Faith-based Protocol (Recurrence Rules)
 
@@ -50,7 +46,61 @@ The system is built on binary adherence to these recurring tasks:
 
 Treat these as recurring ritual rules, not optional goals. Visibility of these tasks is the primary trust metric in the **Observer View**.
 
-## 4. How to Run the Site
+## 4. Command Reference & Visual Guide
+
+Here is exactly what the helper scripts generate, so you know what to expect.
+
+### A. The Daily Logger (`./log-today.sh`)
+**Action:** Creates a new file in `content/daily/YYYY-MM-DD.md`.
+**Generated Content:**
+```markdown
+---
+title: "Daily Log - 2026-02-02"
+date: 2026-02-02
+status: "Pending"
+---
+
+## 1. Salah (The Obligatory Five)
+- [ ] Fajr
+- [ ] Dhuhr
+- [ ] Asr
+- [ ] Maghrib
+- [ ] Isha
+
+## 2. Recurrence Rules
+- [ ] Surah Al-Baqarah (Cadence: 3 days)
+- [ ] Salatul Tahajjud (Wake: 04:00)
+
+## 3. Reflections
+...
+
+## 4. Tasks
+<!-- Add normal daily tasks below -->
+```
+
+### B. The Task Logger (`./log-task.sh "Buy Milk"`)
+**Action:** Finds today's file and **appends** the task to the bottom.
+**Visual Result:**
+```markdown
+## 4. Tasks
+<!-- Add normal daily tasks below -->
+- [ ] Buy Milk    <-- Appended automatically
+```
+
+### C. The Note Creator (`./new-note.sh "Title" "section"`)
+**Action:** Creates a clean markdown file in the specified section (tech/essays/philosophy).
+**Example:** `./new-note.sh "Learning Rust" "tech"`
+**Generated Content (`content/tech/learning-rust.md`):**
+```markdown
+---
+title: "Learning Rust"
+date: 2026-02-02T10:00:00+00:00
+draft: false
+---
+
+```
+
+## 5. How to Run the Site
 
 1.  **Start the Server:**
     Open your terminal in this directory and run:
@@ -60,7 +110,7 @@ Treat these as recurring ritual rules, not optional goals. Visibility of these t
 2.  **View:**
     Open `http://localhost:1313` in your browser.
 
-## 5. Customizing the Look
+## 6. Customizing the Look
 
 *   **Styles:** Edit `themes/earth-focus/static/css/style.css`.
 *   **Layouts:** Edit HTML files in `themes/earth-focus/layouts/`.
@@ -69,7 +119,7 @@ Treat these as recurring ritual rules, not optional goals. Visibility of these t
     *   `_default/single.html`: How a single post looks.
     *   `_default/observer.html`: The special observer view layout.
 
-## 6. Deployment (Optional)
+## 7. Deployment (Optional)
 
 To publish this site to the web (e.g., GitHub Pages, Netlify):
 1.  Run `hugo` (without `server`) to build the static files into the `public/` folder.
