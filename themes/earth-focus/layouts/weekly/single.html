@@ -74,6 +74,56 @@
         </table>
     </section>
 
+    <section>
+        <h3 style="margin-top: 3rem; text-align: center;">Daily Rhythm</h3>
+        <p style="text-align: center; font-size: 0.9rem; color: #777; margin-bottom: 2rem;">Total hours (Work + Learn + Body) per day</p>
+        
+        <table class="charts-css column show-labels data-spacing-5" id="daily-rhythm-chart">
+            <caption> Daily Total Output </caption>
+            <tbody>
+                {{ range $weeklyLogs.Reverse }}
+                    {{ $dayTotal := add (add (.Params.focus_hours | default 0) (.Params.learning_hours | default 0)) (.Params.physical_hours | default 0) }}
+                    {{/* Scale based on a 12-hour "max productive day" */}}
+                    <tr>
+                        <th scope="row"> {{ .Date.Format "Mon" }} </th>
+                        <td style="--size: calc( {{ $dayTotal }} / 12 );"> 
+                            <span class="data"> {{ $dayTotal }}h </span> 
+                        </td>
+                    </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h3 style="margin-top: 3rem; text-align: center;">Ritual Adherence</h3>
+        <p style="text-align: center; font-size: 0.9rem; color: #777; margin-bottom: 2rem;">Consistency of core habits (out of 7 days)</p>
+        
+        {{/* Count occurrences of [x] for specific strings */}}
+        {{ $habits := slice "Fajr" "Dhuhr" "Asr" "Maghrib" "Isha" "Morning Meditation" "Exercise / Ruck" "Programming Practice" }}
+        
+        <table class="charts-css horizontal show-labels data-spacing-10" id="habit-chart">
+            <caption> Habit Consistency </caption>
+            <tbody>
+                {{ range $habits }}
+                    {{ $habit := . }}
+                    {{ $count := 0 }}
+                    {{ range $weeklyLogs }}
+                        {{ if in .RawContent (printf "[x] %s" $habit) }}
+                            {{ $count = add $count 1 }}
+                        {{ end }}
+                    {{ end }}
+                    <tr>
+                        <th scope="row"> {{ $habit }} </th>
+                        <td style="--size: calc( {{ $count }} / 7 );"> 
+                            <span class="data"> {{ $count }}/7 </span> 
+                        </td>
+                    </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </section>
+
     <hr style="margin: 3rem 0;">
 
     <section class="content">
@@ -81,4 +131,50 @@
         {{ .Content }}
     </section>
 </article>
+
+<style>
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: #f4f1ea;
+    padding: 1rem;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #e6e2da;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #777;
+    letter-spacing: 0.05em;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+#weekly-chart {
+    height: 250px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#weekly-chart td {
+    background-color: var(--color);
+}
+
+#weekly-chart .data {
+    font-weight: bold;
+    margin-top: -20px; /* Pull text up */
+}
+</style>
 {{ end }}

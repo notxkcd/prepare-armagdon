@@ -1,0 +1,84 @@
+{{ define "main" }}
+<article>
+    <header>
+        <h1>{{ .Title }}</h1>
+        <p class="meta">Monthly Retrospective: {{ .Date.Format "January 2006" }}</p>
+    </header>
+
+    {{/* 1. Calculate Date Range (Start to End of Month) */}}
+    {{ $monthStart := .Date }} {{/* Assumes file date is 1st of month, typically */}}
+    {{ $monthEnd := $monthStart.AddDate 0 1 -1 }}
+    
+    {{/* 2. Fetch Logs in Range */}}
+    {{ $allLogs := where .Site.RegularPages "Section" "daily" }}
+    {{ $monthlyLogs := slice }}
+    {{ range $allLogs }}
+        {{/* Simple check: does the log month/year match the page month/year? */}}
+        {{ if eq .Date.Month $monthStart.Month }}
+            {{ $monthlyLogs = $monthlyLogs | append . }}
+        {{ end }}
+    {{ end }}
+
+    {{/* 3. Aggregate Data */}}
+    {{ $totalWork := 0.0 }}
+    {{ $totalLearn := 0.0 }}
+    {{ $totalPhys := 0.0 }}
+
+    {{ range $monthlyLogs }}
+        {{ $totalWork = add $totalWork (.Params.focus_hours | default 0) }}
+        {{ $totalLearn = add $totalLearn (.Params.learning_hours | default 0) }}
+        {{ $totalPhys = add $totalPhys (.Params.physical_hours | default 0) }}
+    {{ end }}
+
+    {{ $grandTotal := add (add $totalWork $totalLearn) $totalPhys }}
+    {{ if eq $grandTotal 0.0 }} {{ $grandTotal = 1.0 }} {{ end }}
+
+    <section class="dashboard-grid">
+        <div class="stat-card">
+            <span class="stat-label">Deep Work</span>
+            <span class="stat-value">{{ $totalWork }}h</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Learning</span>
+            <span class="stat-value">{{ $totalLearn }}h</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Physical</span>
+            <span class="stat-value">{{ $totalPhys }}h</span>
+        </div>
+    </section>
+
+    <section>
+        <h3 style="margin-top: 3rem; text-align: center;">Monthly Composition</h3>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap;">
+            <table class="charts-css pie" id="monthly-donut">
+                <caption> Monthly Allocation </caption>
+                <tbody>
+                    <tr>
+                        <td style="--start: 0.0; --end: calc( {{ $totalWork }} / {{ $grandTotal }} ); --color: #3d4a26;"></td>
+                    </tr>
+                    <tr>
+                        <td style="--start: calc( {{ $totalWork }} / {{ $grandTotal }} ); --end: calc( ({{ $totalWork }} + {{ $totalLearn }}) / {{ $grandTotal }} ); --color: #a68b5a;"></td>
+                    </tr>
+                    <tr>
+                        <td style="--start: calc( ({{ $totalWork }} + {{ $totalLearn }}) / {{ $grandTotal }} ); --end: 1.0; --color: #8c5e44;"></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="chart-legend">
+                <div class="legend-item"><span class="swatch" style="background: #3d4a26;"></span> Deep Work ({{ printf "%.1f" (mul (div $totalWork $grandTotal) 100) }}%)</div>
+                <div class="legend-item"><span class="swatch" style="background: #a68b5a;"></span> Learning ({{ printf "%.1f" (mul (div $totalLearn $grandTotal) 100) }}%)</div>
+                <div class="legend-item"><span class="swatch" style="background: #8c5e44;"></span> Body ({{ printf "%.1f" (mul (div $totalPhys $grandTotal) 100) }}%)</div>
+            </div>
+        </div>
+    </section>
+
+    <hr style="margin: 3rem 0;">
+
+    <section class="content">
+        <h2>Retrospective</h2>
+        {{ .Content }}
+    </section>
+</article>
+{{ end }}

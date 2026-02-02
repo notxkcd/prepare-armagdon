@@ -142,10 +142,9 @@ The rules are purely a mental model and a template. To change your wake-up time 
 *   **Workload Chart (Observer View):** It looks for the `focus_hours` field in the frontmatter. 
     *   *Tip:* The chart is scaled to 8 hours. If you consistently work 12 hours, edit `themes/earth-focus/layouts/_default/observer.html` and change the `calc( {{ $val }} / 8 )` to `12`.
 *   **Time Distribution (Weekly View):** This chart aggregates data from **all daily logs within that week (Mon-Sun)**.
-    *   **Work:** Sum of `focus_hours`.
-    *   **Learn:** Sum of `learning_hours`.
-    *   **Body:** Sum of `physical_hours`.
-    *   *Note:* If you don't log hours in your daily files, this chart will be empty.
+*   **Ritual Adherence (Weekly View):** Automatically scans your logs for checked habits (e.g., `[x] Fajr`) and charts your consistency (out of 7 days).
+*   **Monthly Composition (Monthly View):** A donut chart visualizing the percentage breakdown of your total monthly effort across Work, Learning, and Body.
+    *   *Note:* If you don't log hours in your daily files, these charts will be empty.
 
 ### Script Logic
 *   `./log-today.sh`: Uses `hugo new` which triggers the `daily.md` archetype.

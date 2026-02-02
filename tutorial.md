@@ -70,9 +70,13 @@ hugo new content/weekly/week-XX-YYYY.md
 Run `make serve` and go to `http://localhost:1313/weekly/week-XX-YYYY/`.
 You will see:
 *   **3 Big Cards:** Total hours spent on Work, Learning, and Body.
-*   **Distribution Chart:** A stacked bar chart showing where your time went.
+*   **Time Distribution Chart:** A breakdown of where your hours went.
+*   **Daily Rhythm Chart:** Your total output per day (shows consistency).
+*   **Ritual Adherence:** Automatically tracks how many times you checked off "Fajr", "Dhuhr", "Exercise", etc. during the week.
 
-**If the chart is empty:** You forgot to enter numbers in the `focus_hours` fields of your daily logs. Go back and fill them in.
+**Monthly View:**
+At the end of the month, go to your monthly review to see:
+*   **Monthly Composition:** A donut chart showing the percentage breakdown of your total effort for the month.
 
 ---
 

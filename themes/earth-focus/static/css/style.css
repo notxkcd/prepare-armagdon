@@ -348,30 +348,35 @@ ul li::before {
     font-family: 'Patrick Hand', cursive;
 }
 
-#weekly-chart {
+#weekly-chart, #daily-rhythm-chart {
     height: 300px;
     max-width: 500px;
     margin: 3rem auto;
     font-family: 'Patrick Hand', cursive;
 }
 
-#weekly-chart td {
+#weekly-chart td, #daily-rhythm-chart td {
     background-color: var(--color);
     border-radius: 4px 4px 0 0;
     transition: opacity 0.2s;
 }
 
-#weekly-chart td:hover {
+#daily-rhythm-chart td {
+    background-color: var(--accent-color); /* Default green for Daily Rhythm */
+    opacity: 0.8;
+}
+
+#weekly-chart td:hover, #daily-rhythm-chart td:hover {
     opacity: 0.9;
 }
 
-#weekly-chart th {
+#weekly-chart th, #daily-rhythm-chart th {
     font-size: 1.1rem;
     padding-top: 15px;
     color: var(--text-color);
 }
 
-#weekly-chart .data {
+#weekly-chart .data, #daily-rhythm-chart .data {
     font-weight: 700;
     font-size: 1.1rem;
     color: var(--text-color);
@@ -379,6 +384,74 @@ ul li::before {
     text-align: center;
     width: 100%;
     display: block;
+}
+
+/* Donut Chart */
+#monthly-donut {
+    width: 250px;
+    height: 250px;
+    margin: 0;
+}
+
+#monthly-donut td {
+    background-color: var(--color);
+}
+
+/* Create the "hole" for the donut */
+#monthly-donut::after {
+    content: "";
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 60%;
+    height: 60%;
+    background-color: var(--bg-color);
+    border-radius: 50%;
+}
+
+.chart-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+#habit-chart {
+    height: 400px;
+    max-width: 600px;
+    margin: 3rem auto;
+    font-family: 'Patrick Hand', cursive;
+}
+
+#habit-chart td {
+    background-color: #8f9e73; /* Muted olive */
+    border-radius: 0 4px 4px 0;
+}
+
+#habit-chart th {
+    width: 180px;
+    text-align: right;
+    padding-right: 15px;
+    font-size: 1rem;
+}
+
+#habit-chart .data {
+    font-weight: 700;
+    padding-left: 10px;
 }
 
 footer {

@@ -1,17 +1,8 @@
 ---
-title: "On Digital Minimalism"
-date: 2023-10-20
-tags: ["culture", "tech"]
-summary: "Why we need less noise."
+title: "Understanding Rust Ownership"
+date: 2026-02-05
+tags: ["rust", "memory"]
 ---
-
-We are drowning in information but starving for wisdom. 
-
-The goal of this site is to strip away the non-essential. To focus on text, meaning, and long-term value.
-
-
-## Rust
-
 
 Ownership is Rust’s most unique feature. It enables memory safety without a garbage collector.
 
