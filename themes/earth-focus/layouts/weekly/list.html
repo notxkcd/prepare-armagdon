@@ -37,18 +37,21 @@
         </div>
     </section>
 
-    {{/* 3. Weekly Volume Trend Chart */}}
-    <section class="trend-section">
-        <h2 style="text-align: center; margin-top: 4rem;">Workload Trend (Weekly Volume)</h2>
-        <p style="text-align: center; font-size: 0.9rem; color: #777; margin-bottom: 2rem;">Total focus hours per weekly review period</p>
+    {{/* 3. View Toggles */}}
+    <div class="view-toggles">
+        <button onclick="showTrend('weekly')" id="btn-weekly" class="toggle-btn active">Weekly View</button>
+        <button onclick="showTrend('monthly')" id="btn-monthly" class="toggle-btn">Monthly View</button>
+    </div>
+
+    {{/* 4. Weekly Volume Trend Chart */}}
+    <section id="weekly-trend" class="trend-section">
+        <h2 style="text-align: center; margin-top: 2rem;">Workload Trend (Weekly)</h2>
+        <p style="text-align: center; font-size: 0.9rem; color: #777; margin-bottom: 2rem;">Focus hours recorded in weekly review files</p>
         
-        <table class="charts-css column show-labels data-spacing-10" id="global-trend-chart">
+        <table class="charts-css column show-labels data-spacing-5" id="global-trend-chart">
             <caption> Focus Hours per Week </caption>
             <tbody>
-                {{/* Loop through individual weekly review pages to get their aggregated stats */}}
-                {{ $weeks := .Pages.ByDate }}
-                {{ range $weeks }}
-                    {{/* Recalculate this week's work for the chart */}}
+                {{ range (where .Site.RegularPages "Section" "weekly").ByDate }}
                     {{ $weekEnd := .Date }}
                     {{ $weekStart := $weekEnd.AddDate 0 0 -6 }}
                     {{ $thisWeekWork := 0.0 }}
@@ -58,17 +61,12 @@
                         {{ end }}
                     {{ end }}
                     
-                    {{/* Determine color based on weekly focus volume */}}
-                    {{ $weekColor := "#8c5e44" }} {{/* Low volume < 20h */}}
-                    {{ if ge $thisWeekWork 40.0 }}
-                        {{ $weekColor = "#556b2f" }} {{/* High volume > 40h */}}
-                    {{ else if ge $thisWeekWork 20.0 }}
-                        {{ $weekColor = "#a68b5a" }} {{/* Moderate volume 20-40h */}}
-                    {{ end }}
+                    {{ $weekColor := "#8c5e44" }}
+                    {{ if ge $thisWeekWork 40.0 }} {{ $weekColor = "#556b2f" }}
+                    {{ else if ge $thisWeekWork 20.0 }} {{ $weekColor = "#a68b5a" }} {{ end }}
                     
                     <tr>
-                        <th scope="row"> {{ .Date.Format "W" }} </th>
-                        {{/* Scale against a 50-hour "perfect week" */}}
+                        <th scope="row"> {{ .Date.Format "Jan 02" }} </th>
                         <td style="--size: calc( {{ $thisWeekWork }} / 50 ); background-color: {{ $weekColor }};"> 
                             <span class="data"> {{ printf "%.0f" $thisWeekWork }}h </span> 
                         </td>
@@ -78,13 +76,43 @@
         </table>
     </section>
 
+    {{/* 5. Monthly Volume Trend Chart */}}
+    <section id="monthly-trend" class="trend-section" style="display: none;">
+        <h2 style="text-align: center; margin-top: 2rem;">Workload Trend (Monthly)</h2>
+        <p style="text-align: center; font-size: 0.9rem; color: #777; margin-bottom: 2rem;">Total focus hours aggregated by month</p>
+        
+        <table class="charts-css column show-labels data-spacing-20" id="monthly-trend-chart">
+            <caption> Focus Hours per Month </caption>
+            <tbody>
+                {{ $monthlyGroups := $allDailyLogs.GroupByDate "Jan 2006" }}
+                {{ range $monthlyGroups.Reverse }}
+                    {{ $monthWork := 0.0 }}
+                    {{ range .Pages }}
+                        {{ $monthWork = add $monthWork (.Params.focus_hours | default 0) }}
+                    {{ end }}
+
+                    {{ $monthColor := "#8c5e44" }}
+                    {{ if ge $monthWork 160.0 }} {{ $monthColor = "#556b2f" }}
+                    {{ else if ge $monthWork 80.0 }} {{ $monthColor = "#a68b5a" }} {{ end }}
+
+                    <tr>
+                        <th scope="row"> {{ .Key }} </th>
+                        <td style="--size: calc( {{ $monthWork }} / 200 ); background-color: {{ $monthColor }};"> 
+                            <span class="data"> {{ printf "%.0f" $monthWork }}h </span> 
+                        </td>
+                    </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </section>
+
     <hr style="margin: 5rem 0;">
 
-    {{/* 4. The Archive List */}}
+    {{/* 6. The Archive List */}}
     <section class="weekly-archive-list">
         <h2>Historical Reviews</h2>
         <div class="list">
-            {{ range .Pages }}
+            {{ range (where .Site.RegularPages "Section" "weekly").ByDate.Reverse }}
             <div class="list-item summary-card weekly-card">
                 <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
                 <p class="meta">{{ .Date.Format "Jan 2, 2006" }}</p>
@@ -100,7 +128,52 @@
     </section>
 </article>
 
+<script>
+function showTrend(view) {
+    const weekly = document.getElementById('weekly-trend');
+    const monthly = document.getElementById('monthly-trend');
+    const btnW = document.getElementById('btn-weekly');
+    const btnM = document.getElementById('btn-monthly');
+
+    if (view === 'weekly') {
+        weekly.style.display = 'block';
+        monthly.style.display = 'none';
+        btnW.classList.add('active');
+        btnM.classList.remove('active');
+    } else {
+        weekly.style.display = 'none';
+        monthly.style.display = 'block';
+        btnW.classList.remove('active');
+        btnM.classList.add('active');
+    }
+}
+</script>
+
 <style>
+.view-toggles {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.toggle-btn {
+    padding: 0.6rem 1.5rem;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.toggle-btn.active {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+
 .stat-sub {
     display: block;
     font-size: 0.8rem;
@@ -108,10 +181,30 @@
     margin-top: 0.2rem;
 }
 
-#global-trend-chart {
+#global-trend-chart, #monthly-trend-chart {
     height: 350px;
     max-width: 100%;
     margin: 0 auto;
+}
+
+#monthly-trend-chart td {
+    border-radius: 4px 4px 0 0;
+}
+
+#monthly-trend-chart th {
+    font-size: 0.8rem;
+    padding-top: 15px;
+    color: #888;
+}
+
+#monthly-trend-chart .data {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-top: -30px;
+    text-align: center;
+    width: 100%;
+    display: block;
 }
 
 .weekly-card {
