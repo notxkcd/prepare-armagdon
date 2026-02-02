@@ -10,7 +10,13 @@ This repository contains your personal accountability system, designed as a mini
     ```
     *(Creates a pre-filled file in `content/daily/`)*
 
-2.  **View the Site:**
+2.  **Add a Normal Task:**
+    ```bash
+    ./log-task.sh "Buy groceries"
+    ```
+    *(Appends a checkbox to today's log)*
+
+3.  **View the Site:**
     ```bash
     make serve
     ```

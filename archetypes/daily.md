@@ -1,5 +1,5 @@
 ---
-title: "Daily Log - {{ now | dateFormat "2006-01-02" }}"
+title: "Daily Log - {{ .Date | printf "%Y-%m-%d" }}"
 date: {{ .Date }}
 status: "Pending"
 ---
@@ -17,3 +17,6 @@ status: "Pending"
 
 ## 3. Reflections
 ...
+
+## 4. Tasks
+<!-- Add normal daily tasks below -->
