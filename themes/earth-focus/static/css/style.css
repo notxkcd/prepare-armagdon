@@ -216,12 +216,60 @@ ul li::before {
     border: 1px solid rgba(27, 31, 35, 0.06); /* Very subtle border */
     transition: transform 0.1s ease;
     cursor: help; /* Question mark cursor on hover */
+    position: relative; /* For tooltip positioning */
+}
+
+/* Custom CSS Tooltip */
+.day-box:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 140%; /* Above the box */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #3b3228; /* Deep Loam Dark */
+    color: #f4f1ea; /* Off-white text */
+    padding: 0.5rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-family: 'Patrick Hand', cursive;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    pointer-events: none;
+    opacity: 0;
+    animation: tooltipFade 0.2s forwards;
+}
+
+/* Tooltip Arrow */
+.day-box:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 100%; /* Connected to bottom of tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #3b3228 transparent transparent transparent;
+    z-index: 100;
+    opacity: 0;
+    animation: tooltipFade 0.2s forwards;
+}
+
+@keyframes tooltipFade {
+    to { opacity: 1; transform: translateX(-50%) translateY(-5px); }
 }
 
 .day-box:hover {
     transform: scale(1.15);
     border-color: rgba(27, 31, 35, 0.3);
 }
+
+/* Text Selection Highlight */
+::selection {
+    background-color: rgba(85, 107, 47, 0.3); /* Muted Green with opacity */
+    color: #1a1a1a;
+}
+
 
 /* Status Colors */
 .day-box.done { 

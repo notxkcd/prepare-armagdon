@@ -1,5 +1,5 @@
 ---
-title: "Daily Log - {{ .Date | printf "%Y-%m-%d (%A)" }}"
+title: "Daily Log - {{ dateFormat "2006-01-02 (Monday)" .Date }}"
 date: {{ .Date }}
 status: "Pending"
 # Metrics (Enter hours as decimals, e.g. 1.5)

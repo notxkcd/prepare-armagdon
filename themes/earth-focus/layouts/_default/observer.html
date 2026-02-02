@@ -12,7 +12,7 @@
             {{/* Show last 7 days */}}
             {{ range first 7 $dailyLogs }}
                 <div class="day-box {{ if eq .Params.status "Complete" }}done{{ else if eq .Params.status "Partial" }}partial{{ else }}empty{{ end }}" 
-                     title="{{ .Date.Format "Monday, Jan 2" }}: {{ .Params.status | default "No Status" }}">
+                     data-tooltip="{{ .Date.Format "Monday, Jan 2" }}: {{ .Params.status | default "No Status" }}">
                 </div>
             {{ else }}
                 <p>No logs found yet.</p>
