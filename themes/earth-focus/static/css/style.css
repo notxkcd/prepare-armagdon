@@ -329,6 +329,12 @@ ul li::before {
     text-align: center;
     border: 1px solid #e6e2da;
     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
 .stat-label {
@@ -371,8 +377,28 @@ ul li::before {
 
 #weekly-chart th, #daily-rhythm-chart th {
     font-size: 1.1rem;
-    padding-top: 15px;
+    padding-top: 25px; /* Increased padding for more space between label and bar */
     color: var(--text-color);
+}
+
+/* Styles for Target 'Ghost' Bars */
+.target-ghost {
+    background-color: transparent !important;
+    border: 2px dashed #dcd8d0;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+}
+
+#daily-rhythm-chart.stacked td {
+    border-radius: 0; /* Flat bottom/top for stacking */
+}
+
+#daily-rhythm-chart.stacked td:first-of-type {
+    border-radius: 0 0 0 0;
+}
+
+#daily-rhythm-chart.stacked td.target-ghost {
+    border-radius: 4px 4px 0 0;
 }
 
 #weekly-chart .data, #daily-rhythm-chart .data {
