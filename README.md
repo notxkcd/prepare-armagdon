@@ -119,7 +119,32 @@ draft: false
     *   `_default/single.html`: How a single post looks.
     *   `_default/observer.html`: The special observer view layout.
 
-## 7. Deployment (Optional)
+## 7. Maintenance & Customization (Tutorial)
+
+### How to add new Recurring Tasks
+If you want to add a new daily requirement (e.g., "Read 10 pages"):
+1.  Open `archetypes/daily.md`.
+2.  Add a new checkbox under the relevant section:
+    ```markdown
+    - [ ] Read 10 pages
+    ```
+3.  From now on, every time you run `./log-today.sh`, this new task will be included.
+
+### How to modify the Protocol Rules
+The rules are purely a mental model and a template. To change your wake-up time or cadence:
+1.  Edit the text in `archetypes/daily.md`.
+2.  Update the "Faith-based Protocol" section in this `README.md` for consistency.
+
+### How the Charts/Heatmap work
+*   **Heatmap:** It looks for the `status` field in your daily logs. Values should be `Complete`, `Partial`, or `Fail`.
+*   **Workload Chart:** It looks for the `focus_hours` field in the frontmatter. 
+    *   *Tip:* The chart is scaled to 8 hours. If you consistently work 12 hours, edit `themes/earth-focus/layouts/_default/observer.html` and change the `calc( {{ $val }} / 8 )` to `12`.
+
+### Script Logic
+*   `./log-today.sh`: Uses `hugo new` which triggers the `daily.md` archetype.
+*   `./log-task.sh`: Uses `grep` and `sed` to find the "Tasks" header and append text. If you rename the "## 4. Tasks" header in the archetype, you **must** update the header name in `log-task.sh` as well.
+
+## 8. Deployment (Optional)
 
 To publish this site to the web (e.g., GitHub Pages, Netlify):
 1.  Run `hugo` (without `server`) to build the static files into the `public/` folder.
