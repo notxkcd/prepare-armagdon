@@ -55,27 +55,29 @@ Here is exactly what the helper scripts generate, so you know what to expect.
 **Generated Content:**
 ```markdown
 ---
-title: "Daily Log - 2026-02-02"
+title: "Daily Log - 2026-02-02 (Monday)"
 date: 2026-02-02
 status: "Pending"
+# Metrics (Enter hours as decimals)
+focus_hours: 0     # Deep Work
+learning_hours: 0  # Coding / Interview Prep
+physical_hours: 0  # Ruck / Gym
 ---
 
-## 1. Salah (The Obligatory Five)
-- [ ] Fajr
-- [ ] Dhuhr
-- [ ] Asr
-- [ ] Maghrib
-- [ ] Isha
-
-## 2. Recurrence Rules
-- [ ] Surah Al-Baqarah (Cadence: 3 days)
-- [ ] Salatul Tahajjud (Wake: 04:00)
-
-## 3. Reflections
+## 1. Faith Protocol (The Non-Negotiables)
+### Salah (5/5 Required)
+- [ ] [Dawn] Fajr
+- [ ] [Noon] Dhuhr
 ...
 
-## 4. Tasks
-<!-- Add normal daily tasks below -->
+### Recurring Rituals
+- [ ] [04:00] Salatul Tahajjud (Wake Up)
+- [ ] [04:30] Surah Al-Baqarah (If due today)
+
+## 2. Daily Discipline (The Grind)
+- [ ] [05:30] Morning Meditation
+- [ ] [07:00] Deep Work (Target: 2 Hours)
+...
 ```
 
 ### B. The Task Logger (`./log-task.sh "Buy Milk"`)
