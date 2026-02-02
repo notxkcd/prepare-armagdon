@@ -36,8 +36,13 @@ focus_hours: 4.5    # How long did you do Deep Work?
 learning_hours: 2   # How long did you study/interview prep?
 physical_hours: 1   # How long did you Ruck/Gym?
 status: "Pending"   # Change to "Complete", "Partial", or "Fail" at end of day
+
+# Targets (Optional: Customize your daily goals)
+focus_target: 8
+learning_target: 4
+physical_target: 2
 ```
-*These numbers feed the charts in the Weekly Dashboard.*
+*These numbers feed the charts in the Weekly Dashboard and the progress bars in the Archive views.*
 
 **B. The Protocol (Checklists)**
 The body of the file contains your "Non-Negotiables".

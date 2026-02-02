@@ -146,6 +146,18 @@ The rules are purely a mental model and a template. To change your wake-up time 
 *   **Monthly Composition (Monthly View):** A donut chart visualizing the percentage breakdown of your total monthly effort across Work, Learning, and Body.
     *   *Note:* If you don't log hours in your daily files, these charts will be empty.
 
+### How Metrics & Rituals are Measured
+
+*   **Hour Progress Bars:**
+    *   **Focus:** Measured against `focus_target` (Default: **8h**).
+    *   **Learning:** Measured against `learning_target` (Default: **4h**).
+    *   **Body:** Measured against `physical_target` (Default: **2h**).
+    *   *Calculation:* `(Logged Hours / Target Hours) * 100%`.
+    *   *Note:* You can customize these targets per day in the file's metadata.
+*   **Ritual Summaries:** The system scans the body of your daily logs for specific keywords marked as completed (`[x]`).
+    *   **Tracked Keywords:** `Fajr`, `Dhuhr`, `Asr`, `Maghrib`, `Isha`, `Deep Work`, `Exercise`.
+*   **Unfinished Tasks:** The system counts every instance of an empty checkbox (`[ ]`) found in the file, including rituals and ad-hoc tasks.
+
 ### Script Logic
 *   `./log-today.sh`: Uses `hugo new` which triggers the `daily.md` archetype.
 *   `./log-task.sh`: Uses `grep` and `sed` to find the "Tasks" header and append text. If you rename the "## 4. Tasks" header in the archetype, you **must** update the header name in `log-task.sh` as well.
@@ -155,13 +167,6 @@ The rules are purely a mental model and a template. To change your wake-up time 
 To publish this site to the web (e.g., GitHub Pages, Netlify):
 1.  Run `hugo` (without `server`) to build the static files into the `public/` folder.
 2.  Upload the `public/` folder to your host.
-
-## 9. Offline Usage
-You can browse the site entirely offline (without internet) using the local server:
-1.  Run `make serve`
-2.  Open `http://localhost:1313`
-
-*Note: Double-clicking HTML files directly from the file explorer is not supported to ensure maximum compatibility with the server features.*
 
 ## 9. Offline Usage
 You can browse the site entirely offline (without internet) using the local server:

@@ -1,11 +1,15 @@
 ---
-title: "Daily Log - {{ .Date | printf "%Y-%m-%d (%A)" }}"
+title: "Daily Log - {{ dateFormat "2006-01-02 (Monday)" .Date }}"
 date: {{ .Date }}
 status: "Pending"
 # Metrics (Enter hours as decimals, e.g. 1.5)
 focus_hours: 0     # Deep Work
 learning_hours: 0  # Coding / Interview Prep
 physical_hours: 0  # Ruck / Gym
+# Targets (Used for progress bars)
+focus_target: 8
+learning_target: 4
+physical_target: 2
 ---
 
 ## 1. Faith Protocol (The Non-Negotiables)

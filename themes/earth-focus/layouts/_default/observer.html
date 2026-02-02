@@ -60,7 +60,7 @@
                         <strong>{{ .Params.focus_hours | default 0 }}h</strong>
                     </div>
                     <div class="progress-track">
-                        <div class="progress-fill work" style="width: {{ mul (div (.Params.focus_hours | default 0) 8) 100 }}%"></div>
+                        <div class="progress-fill work" style="width: {{ mul (div (.Params.focus_hours | default 0) (.Params.focus_target | default 8)) 100 }}%"></div>
                     </div>
                 </div>
                 
@@ -70,7 +70,7 @@
                         <strong>{{ .Params.learning_hours | default 0 }}h</strong>
                     </div>
                     <div class="progress-track">
-                        <div class="progress-fill learn" style="width: {{ mul (div (.Params.learning_hours | default 0) 4) 100 }}%"></div>
+                        <div class="progress-fill learn" style="width: {{ mul (div (.Params.learning_hours | default 0) (.Params.learning_target | default 4)) 100 }}%"></div>
                     </div>
                 </div>
 
@@ -80,7 +80,7 @@
                         <strong>{{ .Params.physical_hours | default 0 }}h</strong>
                     </div>
                     <div class="progress-track">
-                        <div class="progress-fill body" style="width: {{ mul (div (.Params.physical_hours | default 0) 2) 100 }}%"></div>
+                        <div class="progress-fill body" style="width: {{ mul (div (.Params.physical_hours | default 0) (.Params.physical_target | default 2)) 100 }}%"></div>
                     </div>
                 </div>
             </div>
