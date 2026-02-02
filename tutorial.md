@@ -82,6 +82,9 @@ You will see:
 **Monthly View:**
 At the end of the month, go to your monthly review to see:
 *   **Monthly Composition:** A donut chart showing the percentage breakdown of your total effort for the month.
+*   **Activity Calendar:** An interactive grid showing which days you were active.
+    *   **Clickable Dates:** Days with content are highlighted in green. Clicking a date scrolls you to the "Daily Evidence" for that specific day.
+*   **Daily Evidence Breakdown:** A deep-dive list at the bottom of the monthly page that groups every file you wrote (logs, tech notes, essays) by their category for each day.
 
 ---
 

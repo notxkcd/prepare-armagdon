@@ -6,6 +6,10 @@ theme = 'earth-focus'
 
 [menus]
   [[menus.main]]
+    name = 'Dialogue'
+    url = '/communication/'
+    weight = 5
+  [[menus.main]]
     name = 'Philosophy'
     url = '/philosophy/'
     weight = 10
@@ -25,3 +29,7 @@ theme = 'earth-focus'
     name = 'Essays'
     url = '/essays/'
     weight = 50
+  [[menus.main]]
+    name = 'Spreadsheet'
+    url = '/spreadsheet/'
+    weight = 60

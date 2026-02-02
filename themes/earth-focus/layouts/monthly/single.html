@@ -1,84 +1,260 @@
 {{ define "main" }}
-<article>
+<article class="monthly-review">
     <header>
         <h1>{{ .Title }}</h1>
         <p class="meta">Monthly Retrospective: {{ .Date.Format "January 2006" }}</p>
     </header>
 
-    {{/* 1. Calculate Date Range (Start to End of Month) */}}
-    {{ $monthStart := .Date }} {{/* Assumes file date is 1st of month, typically */}}
-    {{ $monthEnd := $monthStart.AddDate 0 1 -1 }}
-    
-    {{/* 2. Fetch Logs in Range */}}
+    {{/* 1. Data Aggregation */}}
+    {{ $month := .Date.Month }}
+    {{ $year := .Date.Year }}
     {{ $allLogs := where .Site.RegularPages "Section" "daily" }}
     {{ $monthlyLogs := slice }}
     {{ range $allLogs }}
-        {{/* Simple check: does the log month/year match the page month/year? */}}
-        {{ if eq .Date.Month $monthStart.Month }}
+        {{ if and (eq .Date.Month $month) (eq .Date.Year $year) }}
             {{ $monthlyLogs = $monthlyLogs | append . }}
         {{ end }}
     {{ end }}
 
-    {{/* 3. Aggregate Data */}}
     {{ $totalWork := 0.0 }}
     {{ $totalLearn := 0.0 }}
     {{ $totalPhys := 0.0 }}
-
     {{ range $monthlyLogs }}
         {{ $totalWork = add $totalWork (.Params.focus_hours | default 0) }}
         {{ $totalLearn = add $totalLearn (.Params.learning_hours | default 0) }}
         {{ $totalPhys = add $totalPhys (.Params.physical_hours | default 0) }}
     {{ end }}
-
     {{ $grandTotal := add (add $totalWork $totalLearn) $totalPhys }}
     {{ if eq $grandTotal 0.0 }} {{ $grandTotal = 1.0 }} {{ end }}
 
+    {{/* 2. Stats Dashboard */}}
     <section class="dashboard-grid">
         <div class="stat-card">
             <span class="stat-label">Deep Work</span>
-            <span class="stat-value">{{ $totalWork }}h</span>
+            <span class="stat-value">{{ printf "%.1f" $totalWork }}h</span>
         </div>
         <div class="stat-card">
             <span class="stat-label">Learning</span>
-            <span class="stat-value">{{ $totalLearn }}h</span>
+            <span class="stat-value">{{ printf "%.1f" $totalLearn }}h</span>
         </div>
         <div class="stat-card">
             <span class="stat-label">Physical</span>
-            <span class="stat-value">{{ $totalPhys }}h</span>
+            <span class="stat-value">{{ printf "%.1f" $totalPhys }}h</span>
         </div>
     </section>
 
-    <section>
-        <h3 style="margin-top: 3rem; text-align: center;">Monthly Composition</h3>
-        <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap;">
+    {{/* 3. Monthly Composition */}}
+    <section class="composition-section">
+        <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap; margin: 3rem 0;">
             <table class="charts-css pie" id="monthly-donut">
-                <caption> Monthly Allocation </caption>
                 <tbody>
-                    <tr>
-                        <td style="--start: 0.0; --end: calc( {{ $totalWork }} / {{ $grandTotal }} ); --color: #3d4a26;"></td>
-                    </tr>
-                    <tr>
-                        <td style="--start: calc( {{ $totalWork }} / {{ $grandTotal }} ); --end: calc( ({{ $totalWork }} + {{ $totalLearn }}) / {{ $grandTotal }} ); --color: #a68b5a;"></td>
-                    </tr>
-                    <tr>
-                        <td style="--start: calc( ({{ $totalWork }} + {{ $totalLearn }}) / {{ $grandTotal }} ); --end: 1.0; --color: #8c5e44;"></td>
-                    </tr>
+                    <tr><td style="--start: 0.0; --end: calc( {{ $totalWork }} / {{ $grandTotal }} ); --color: #3d4a26;"></td></tr>
+                    <tr><td style="--start: calc( {{ $totalWork }} / {{ $grandTotal }} ); --end: calc( ({{ $totalWork }} + {{ $totalLearn }}) / {{ $grandTotal }} ); --color: #a68b5a;"></td></tr>
+                    <tr><td style="--start: calc( ({{ $totalWork }} + {{ $totalLearn }}) / {{ $grandTotal }} ); --end: 1.0; --color: #8c5e44;"></td></tr>
                 </tbody>
             </table>
-            
             <div class="chart-legend">
-                <div class="legend-item"><span class="swatch" style="background: #3d4a26;"></span> Deep Work ({{ printf "%.1f" (mul (div $totalWork $grandTotal) 100) }}%)</div>
-                <div class="legend-item"><span class="swatch" style="background: #a68b5a;"></span> Learning ({{ printf "%.1f" (mul (div $totalLearn $grandTotal) 100) }}%)</div>
-                <div class="legend-item"><span class="swatch" style="background: #8c5e44;"></span> Body ({{ printf "%.1f" (mul (div $totalPhys $grandTotal) 100) }}%)</div>
+                <div class="legend-item"><span class="swatch" style="background: #3d4a26;"></span> Work ({{ printf "%.0f" (mul (div $totalWork $grandTotal) 100) }}%)</div>
+                <div class="legend-item"><span class="swatch" style="background: #a68b5a;"></span> Learn ({{ printf "%.0f" (mul (div $totalLearn $grandTotal) 100) }}%)</div>
+                <div class="legend-item"><span class="swatch" style="background: #8c5e44;"></span> Body ({{ printf "%.0f" (mul (div $totalPhys $grandTotal) 100) }}%)</div>
             </div>
         </div>
     </section>
 
-    <hr style="margin: 3rem 0;">
+    {{/* 4. Interactive Calendar */}}
+    <section class="calendar-section">
+        <h2 style="text-align: center;">Activity Calendar</h2>
+        
+        <div class="calendar-grid">
+            <div class="cal-day-label">Mon</div><div class="cal-day-label">Tue</div><div class="cal-day-label">Wed</div>
+            <div class="cal-day-label">Thu</div><div class="cal-day-label">Fri</div><div class="cal-day-label">Sat</div><div class="cal-day-label">Sun</div>
+            
+            {{/* Logic to find start day and days in month */}}
+            {{ $firstDayOfMonth := (time (printf "%d-%02d-01" $year $month)) }}
+            {{ $startWeekday := printf "%d" $firstDayOfMonth.Weekday }} {{/* 0=Sun, 1=Mon... */}}
+            {{/* Adjust Sun=0 to Sun=7 for easier math if needed, but let's use 1-based */}}
+            {{ if eq $startWeekday "0" }} {{ $startWeekday = "7" }} {{ end }}
+            
+            {{/* Empty cells for padding */}}
+            {{ range seq (sub (int $startWeekday) 1) }}
+                <div class="cal-cell empty"></div>
+            {{ end }}
+
+            {{/* Days of the month */}}
+            {{ $daysInMonth := 31 }}
+            {{ if in (slice 4 6 9 11) $month }} {{ $daysInMonth = 30 }} {{ end }}
+            {{ if eq $month 2 }} 
+                {{ $daysInMonth = 28 }}
+                {{ if or (and (modBool $year 4) (not (modBool $year 100))) (modBool $year 400) }} {{ $daysInMonth = 29 }} {{ end }}
+            {{ end }}
+
+            {{ range seq $daysInMonth }}
+                {{ $day := . }}
+                {{ $currentDate := (time (printf "%d-%02d-%02d" $year $month $day)) }}
+                {{ $dateKey := $currentDate.Format "2006-01-02" }}
+                
+                {{/* Find ALL content for this day */}}
+                {{ $dayContent := slice }}
+                {{ range $.Site.RegularPages }}
+                    {{ if eq (.Date.Format "2006-01-02") $dateKey }}
+                        {{ $dayContent = $dayContent | append . }}
+                    {{ end }}
+                {{ end }}
+
+                <div class="cal-cell {{ if $dayContent }}has-content{{ end }}" 
+                     {{ if $dayContent }}data-tooltip="{{ len $dayContent }} items written"{{ end }}>
+                    {{ if $dayContent }}
+                        <a href="#day-{{ $dateKey }}">{{ $day }}</a>
+                    {{ else }}
+                        {{ $day }}
+                    {{ end }}
+                </div>
+            {{ end }}
+        </div>
+    </section>
+
+    <hr style="margin: 5rem 0;">
+
+    {{/* 5. Detailed Daily Breakdown */}}
+    <section class="daily-breakdown">
+        <h2>Daily Evidence</h2>
+        {{ range seq $daysInMonth }}
+            {{ $day := . }}
+            {{ $dateKey := (printf "%d-%02d-%02d" $year $month $day) }}
+            
+            {{ $dayPages := slice }}
+            {{ range $.Site.RegularPages }}
+                {{ if eq (.Date.Format "2006-01-02") $dateKey }}
+                    {{ $dayPages = $dayPages | append . }}
+                {{ end }}
+            {{ end }}
+
+            {{ if $dayPages }}
+            <div class="day-summary-block" id="day-{{ $dateKey }}">
+                <h3 class="day-title">{{ (time $dateKey).Format "Monday, Jan 02" }}</h3>
+                <div class="day-content-grid">
+                    {{ range $dayPages.GroupBy "Section" }}
+                        <div class="section-group">
+                            <span class="section-label">{{ .Key | title }}</span>
+                            <ul>
+                                {{ range .Pages }}
+                                <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+                                {{ end }}
+                            </ul>
+                        </div>
+                    {{ end }}
+                </div>
+            </div>
+            {{ end }}
+        {{ end }}
+    </section>
+
+    <hr style="margin: 5rem 0;">
 
     <section class="content">
-        <h2>Retrospective</h2>
+        <h2>Monthly Retrospective</h2>
         {{ .Content }}
     </section>
 </article>
+
+<style>
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    max-width: 450px;
+    margin: 2rem auto;
+}
+
+.cal-day-label {
+    text-align: center;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #999;
+    font-weight: 700;
+}
+
+.cal-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.1rem;
+    color: #ccc;
+    position: relative;
+}
+
+.cal-cell.has-content {
+    background: #e6f0e6;
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.cal-cell.has-content a {
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cal-cell.empty {
+    border: none;
+    background: transparent;
+}
+
+.day-summary-block {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    scroll-margin-top: 2rem;
+}
+
+.day-title {
+    margin-top: 0;
+    border-bottom: 2px solid var(--bg-color);
+    padding-bottom: 0.5rem;
+    color: var(--accent-color);
+}
+
+.day-content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.section-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #999;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.section-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.section-group li {
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+}
+
+.section-group a {
+    text-decoration: none;
+}
+</style>
 {{ end }}
