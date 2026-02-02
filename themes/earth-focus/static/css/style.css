@@ -201,20 +201,137 @@ ul li::before {
     content: none; /* Remove bullet for tasks */
 }
 
-/* Observer View Specifics */
+/* Observer View Specifics - GitHub Style */
 .heatmap {
     display: flex;
-    gap: 6px;
+    gap: 4px; /* Tighter gap like GitHub */
     margin-top: 1rem;
+    align-items: flex-end; /* Align bottom */
 }
+
 .day-box {
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
-    border: 2px solid var(--border-color);
+    width: 28px; /* Slightly smaller */
+    height: 28px;
+    border-radius: 2px; /* Subtle rounding */
+    border: 1px solid rgba(27, 31, 35, 0.06); /* Very subtle border */
+    transition: transform 0.1s ease;
+    cursor: help; /* Question mark cursor on hover */
 }
-.day-box.done { background-color: var(--accent-color); border-color: var(--accent-color); opacity: 0.8; }
-.day-box.partial { background-color: #dcd8d0; }
+
+.day-box:hover {
+    transform: scale(1.15);
+    border-color: rgba(27, 31, 35, 0.3);
+}
+
+/* Status Colors */
+.day-box.done { 
+    background-color: var(--accent-color); /* The specific green */
+    border-color: transparent; 
+}
+
+.day-box.partial { 
+    background-color: #9be9a8; /* Lighter Green (GitHub Level 2) instead of grey */
+    opacity: 0.6;
+}
+
+.day-box.empty { 
+    background-color: #ebedf0; /* GitHub Empty Grey */
+}
+
+/* Charts.css Customization */
+#work-chart {
+    height: 250px;
+    max-width: calc(100% - 60px); /* Leave room for labels on the right */
+    margin: 2rem 0;
+    font-family: 'Patrick Hand', cursive;
+}
+
+#work-chart .data {
+    color: var(--text-color);
+    padding-left: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    white-space: nowrap;
+    /* Ensure text is visible outside/at the end of the bar */
+    position: absolute;
+    right: -45px; 
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#work-chart tbody td {
+    background-color: var(--accent-color);
+    opacity: 0.8;
+    border-radius: 0 4px 4px 0;
+    position: relative;
+    overflow: visible; /* Crucial to see text outside the bar */
+}
+
+/* Weekly Dashboard & Charts */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: #f4f1ea;
+    padding: 1.5rem 1rem;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid #e6e2da;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #888;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    font-family: 'Patrick Hand', cursive;
+}
+
+#weekly-chart {
+    height: 300px;
+    max-width: 500px;
+    margin: 3rem auto;
+    font-family: 'Patrick Hand', cursive;
+}
+
+#weekly-chart td {
+    background-color: var(--color);
+    border-radius: 4px 4px 0 0;
+    transition: opacity 0.2s;
+}
+
+#weekly-chart td:hover {
+    opacity: 0.9;
+}
+
+#weekly-chart th {
+    font-size: 1.1rem;
+    padding-top: 15px;
+    color: var(--text-color);
+}
+
+#weekly-chart .data {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-top: -35px; /* Position above the bar */
+    text-align: center;
+    width: 100%;
+    display: block;
+}
 
 footer {
     margin-top: 6rem;

@@ -1,0 +1,84 @@
+{{ define "main" }}
+<article>
+    <header>
+        <h1>{{ .Title }}</h1>
+        <p class="meta">Week ending: {{ .Date.Format "January 2, 2006" }}</p>
+    </header>
+
+    {{/* 1. Calculate Date Range (Mon-Sun of this week) */}}
+    {{ $weekEnd := .Date }}
+    {{ $weekStart := $weekEnd.AddDate 0 0 -6 }}
+    
+    {{/* 2. Fetch Logs in Range */}}
+    {{ $allLogs := where .Site.RegularPages "Section" "daily" }}
+    {{ $weeklyLogs := slice }}
+    {{ range $allLogs }}
+        {{ if and (ge .Date $weekStart) (le .Date $weekEnd) }}
+            {{ $weeklyLogs = $weeklyLogs | append . }}
+        {{ end }}
+    {{ end }}
+
+    {{/* 3. Aggregate Data */}}
+    {{ $totalWork := 0.0 }}
+    {{ $totalLearn := 0.0 }}
+    {{ $totalPhys := 0.0 }}
+
+    {{ range $weeklyLogs }}
+        {{ $totalWork = add $totalWork (.Params.focus_hours | default 0) }}
+        {{ $totalLearn = add $totalLearn (.Params.learning_hours | default 0) }}
+        {{ $totalPhys = add $totalPhys (.Params.physical_hours | default 0) }}
+    {{ end }}
+
+    {{ $grandTotal := add (add $totalWork $totalLearn) $totalPhys }}
+    {{ if eq $grandTotal 0.0 }} {{ $grandTotal = 1.0 }} {{ end }} {{/* Prevent div by zero */}}
+
+    <section class="dashboard-grid">
+        <div class="stat-card">
+            <span class="stat-label">Deep Work</span>
+            <span class="stat-value">{{ $totalWork }}h</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Learning</span>
+            <span class="stat-value">{{ $totalLearn }}h</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Physical</span>
+            <span class="stat-value">{{ $totalPhys }}h</span>
+        </div>
+    </section>
+
+    <section>
+        <h3 style="margin-top: 3rem; text-align: center;">Time Distribution</h3>
+        <table class="charts-css column show-labels data-spacing-20" id="weekly-chart">
+            <caption> Time Allocation </caption>
+            <tbody>
+                <tr>
+                    <th scope="row"> Work </th>
+                    <td style="--size: calc( {{ $totalWork }} / {{ $grandTotal }} ); --color: #3d4a26;"> 
+                        <span class="data"> {{ $totalWork }}h </span> 
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"> Learn </th>
+                    <td style="--size: calc( {{ $totalLearn }} / {{ $grandTotal }} ); --color: #a68b5a;"> 
+                        <span class="data"> {{ $totalLearn }}h </span> 
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"> Body </th>
+                    <td style="--size: calc( {{ $totalPhys }} / {{ $grandTotal }} ); --color: #8c5e44;"> 
+                        <span class="data"> {{ $totalPhys }}h </span> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <hr style="margin: 3rem 0;">
+
+    <section class="content">
+        <h2>Reflections</h2>
+        {{ .Content }}
+    </section>
+</article>
+{{ end }}

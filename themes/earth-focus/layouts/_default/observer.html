@@ -21,6 +21,24 @@
         <p style="font-size: 0.9rem; margin-top: 1rem;">
             <em>Displaying status for the last 7 logged days.</em>
         </p>
+
+        <h3 style="margin-top: 2rem;">Workload Trend (Deep Work)</h3>
+        <table class="charts-css bar show-labels data-spacing-5" id="work-chart">
+            <caption> Weekly Focus Hours </caption>
+            <tbody>
+                {{/* Reverse the logs so they read left-to-right (oldest to newest) */}}
+                {{ range (first 7 $dailyLogs).Reverse }}
+                <tr>
+                    <th scope="row"> {{ .Date.Format "Mon" }} </th>
+                    {{/* Calculate size relative to an 8-hour workday max */}}
+                    {{ $val := .Params.focus_hours | default 0 }}
+                    <td style="--size: calc( {{ $val }} / 8 );"> 
+                        <span class="data"> {{ $val }}h </span> 
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
     </section>
 
     <hr>
