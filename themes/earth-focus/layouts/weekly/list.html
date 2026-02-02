@@ -1,0 +1,139 @@
+{{ define "main" }}
+<article class="ultimate-stats">
+    <header class="stats-header">
+        <h1>{{ .Title }}</h1>
+        <p class="meta">Cumulative progress and historical trends.</p>
+    </header>
+
+    {{/* 1. Aggregate ALL Data from ALL Daily Logs */}}
+    {{ $allDailyLogs := where .Site.RegularPages "Section" "daily" }}
+    {{ $globalWork := 0.0 }}
+    {{ $globalLearn := 0.0 }}
+    {{ $globalPhys := 0.0 }}
+    {{ $totalDays := len $allDailyLogs }}
+
+    {{ range $allDailyLogs }}
+        {{ $globalWork = add $globalWork (.Params.focus_hours | default 0) }}
+        {{ $globalLearn = add $globalLearn (.Params.learning_hours | default 0) }}
+        {{ $globalPhys = add $globalPhys (.Params.physical_hours | default 0) }}
+    {{ end }}
+
+    {{/* 2. Global Stat Cards */}}
+    <section class="dashboard-grid">
+        <div class="stat-card">
+            <span class="stat-label">Total Deep Work</span>
+            <span class="stat-value">{{ printf "%.1f" $globalWork }}h</span>
+            <span class="stat-sub">{{ if gt $totalDays 0 }}{{ printf "%.1f" (div $globalWork $totalDays) }}{{ else }}0{{ end }}h avg/day</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Total Learning</span>
+            <span class="stat-value">{{ printf "%.1f" $globalLearn }}h</span>
+            <span class="stat-sub">{{ $totalDays }} days tracked</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Total Physical</span>
+            <span class="stat-value">{{ printf "%.1f" $globalPhys }}h</span>
+            <span class="stat-sub">Across {{ div $totalDays 7 | math.Ceil }} weeks</span>
+        </div>
+    </section>
+
+    {{/* 3. Weekly Volume Trend Chart */}}
+    <section class="trend-section">
+        <h2 style="text-align: center; margin-top: 4rem;">Workload Trend (Weekly Volume)</h2>
+        <p style="text-align: center; font-size: 0.9rem; color: #777; margin-bottom: 2rem;">Total focus hours per weekly review period</p>
+        
+        <table class="charts-css column show-labels data-spacing-10" id="global-trend-chart">
+            <caption> Focus Hours per Week </caption>
+            <tbody>
+                {{/* Loop through individual weekly review pages to get their aggregated stats */}}
+                {{ $weeks := .Pages.ByDate }}
+                {{ range $weeks }}
+                    {{/* Recalculate this week's work for the chart */}}
+                    {{ $weekEnd := .Date }}
+                    {{ $weekStart := $weekEnd.AddDate 0 0 -6 }}
+                    {{ $thisWeekWork := 0.0 }}
+                    {{ range $allDailyLogs }}
+                        {{ if and (ge .Date $weekStart) (le .Date $weekEnd) }}
+                            {{ $thisWeekWork = add $thisWeekWork (.Params.focus_hours | default 0) }}
+                        {{ end }}
+                    {{ end }}
+                    
+                    {{/* Determine color based on weekly focus volume */}}
+                    {{ $weekColor := "#8c5e44" }} {{/* Low volume < 20h */}}
+                    {{ if ge $thisWeekWork 40.0 }}
+                        {{ $weekColor = "#556b2f" }} {{/* High volume > 40h */}}
+                    {{ else if ge $thisWeekWork 20.0 }}
+                        {{ $weekColor = "#a68b5a" }} {{/* Moderate volume 20-40h */}}
+                    {{ end }}
+                    
+                    <tr>
+                        <th scope="row"> {{ .Date.Format "W" }} </th>
+                        {{/* Scale against a 50-hour "perfect week" */}}
+                        <td style="--size: calc( {{ $thisWeekWork }} / 50 ); background-color: {{ $weekColor }};"> 
+                            <span class="data"> {{ printf "%.0f" $thisWeekWork }}h </span> 
+                        </td>
+                    </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </section>
+
+    <hr style="margin: 5rem 0;">
+
+    {{/* 4. The Archive List */}}
+    <section class="weekly-archive-list">
+        <h2>Historical Reviews</h2>
+        <div class="list">
+            {{ range .Pages }}
+            <div class="list-item summary-card weekly-card">
+                <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+                <p class="meta">{{ .Date.Format "Jan 2, 2006" }}</p>
+                <div class="archive-preview">
+                    {{ .Summary }}
+                </div>
+                <div class="card-action">
+                    <a href="{{ .RelPermalink }}" class="read-more">View Dashboard &rarr;</a>
+                </div>
+            </div>
+            {{ end }}
+        </div>
+    </section>
+</article>
+
+<style>
+.stat-sub {
+    display: block;
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 0.2rem;
+}
+
+#global-trend-chart {
+    height: 350px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.weekly-card {
+    border-top: 3px solid #e6e2da;
+    transition: all 0.3s ease;
+}
+
+.weekly-card:hover {
+    border-top-color: var(--accent-color);
+}
+
+.archive-preview {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 1rem 0;
+    line-height: 1.5;
+}
+
+.read-more {
+    font-family: 'Patrick Hand', cursive;
+    font-weight: 600;
+    text-decoration: none !important;
+}
+</style>
+{{ end }}

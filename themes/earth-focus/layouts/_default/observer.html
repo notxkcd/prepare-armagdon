@@ -30,9 +30,20 @@
                 {{ range (first 7 $dailyLogs).Reverse }}
                 <tr>
                     <th scope="row"> {{ .Date.Format "Mon" }} </th>
-                    {{/* Calculate size relative to an 8-hour workday max */}}
+                    {{/* Calculate size relative to an 8-hour workday max for visual consistency */}}
                     {{ $val := .Params.focus_hours | default 0 }}
-                    <td style="--size: calc( {{ $val }} / 8 );"> 
+                    {{ $target := .Params.focus_target | default 8 }}
+                    {{ $percent := mul (div $val $target) 100 }}
+                    
+                    {{/* Determine color based on target completion percentage */}}
+                    {{ $color := "#8c5e44" }} {{/* Fail/Low */}}
+                    {{ if ge $percent 100 }}
+                        {{ $color = "#556b2f" }} {{/* Success */}}
+                    {{ else if ge $percent 50 }}
+                        {{ $color = "#a68b5a" }} {{/* Partial */}}
+                    {{ end }}
+
+                    <td style="--size: calc( {{ $val }} / 8 ); background-color: {{ $color }};"> 
                         <span class="data"> {{ $val }}h </span> 
                     </td>
                 </tr>

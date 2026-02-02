@@ -308,7 +308,6 @@ ul li::before {
 }
 
 #work-chart tbody td {
-    background-color: var(--accent-color);
     opacity: 0.8;
     border-radius: 0 4px 4px 0;
     position: relative;
@@ -611,6 +610,47 @@ ul li::before {
     font-weight: 400;
     color: #aaa;
     font-size: 0.8rem;
+}
+
+/* Global Trend Chart */
+#global-trend-chart {
+    height: 350px;
+    max-width: 100%;
+    margin: 3rem auto;
+    font-family: 'Patrick Hand', cursive;
+}
+
+#global-trend-chart td {
+    border-radius: 4px 4px 0 0;
+    transition: all 0.2s;
+}
+
+#global-trend-chart td:hover {
+    opacity: 0.9;
+    background-color: #3d4a26;
+}
+
+#global-trend-chart th {
+    font-size: 0.9rem;
+    padding-top: 15px;
+    color: #888;
+}
+
+#global-trend-chart th::before {
+    content: "W";
+    font-size: 0.7rem;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+
+#global-trend-chart .data {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-top: -30px;
+    text-align: center;
+    width: 100%;
+    display: block;
 }
 
 footer {
