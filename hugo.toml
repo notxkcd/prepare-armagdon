@@ -1,4 +1,4 @@
-baseURL = 'https://notxkcd.github.io/prepare-armagdon/'
+baseURL = '/'
 relativeURLs = false
 languageCode = 'en-us'
 title = 'Armagdon Prep'

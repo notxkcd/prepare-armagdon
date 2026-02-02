@@ -13,17 +13,21 @@
     {{ $totalTahajjud := 0 }}
     {{ $daysTracked := len $dailyLogs }}
 
+    {{/* Per-prayer counters */}}
+    {{ $fajrCount := 0 }}{{ $dhuhrCount := 0 }}{{ $asrCount := 0 }}{{ $maghribCount := 0 }}{{ $ishaCount := 0 }}
+
     {{ range $dailyLogs }}
-        {{/* Count Salah */}}
-        {{ if in .RawContent "[x] Fajr" }} {{ $totalSalah = add $totalSalah 1 }} {{ end }}
-        {{ if in .RawContent "[x] Dhuhr" }} {{ $totalSalah = add $totalSalah 1 }} {{ end }}
-        {{ if in .RawContent "[x] Asr" }} {{ $totalSalah = add $totalSalah 1 }} {{ end }}
-        {{ if in .RawContent "[x] Maghrib" }} {{ $totalSalah = add $totalSalah 1 }} {{ end }}
-        {{ if in .RawContent "[x] Isha" }} {{ $totalSalah = add $totalSalah 1 }} {{ end }}
+        {{ $c := .RawContent }}
+        {{/* Count Salah and Specifics */}}
+        {{ if and (in $c "[x]") (in $c "Fajr") }} {{ $totalSalah = add $totalSalah 1 }}{{ $fajrCount = add $fajrCount 1 }} {{ end }}
+        {{ if and (in $c "[x]") (in $c "Dhuhr") }} {{ $totalSalah = add $totalSalah 1 }}{{ $dhuhrCount = add $dhuhrCount 1 }} {{ end }}
+        {{ if and (in $c "[x]") (in $c "Asr") }} {{ $totalSalah = add $totalSalah 1 }}{{ $asrCount = add $asrCount 1 }} {{ end }}
+        {{ if and (in $c "[x]") (in $c "Maghrib") }} {{ $totalSalah = add $totalSalah 1 }}{{ $maghribCount = add $maghribCount 1 }} {{ end }}
+        {{ if and (in $c "[x]") (in $c "Isha") }} {{ $totalSalah = add $totalSalah 1 }}{{ $ishaCount = add $ishaCount 1 }} {{ end }}
         
         {{/* Count Recurring */}}
-        {{ if in .RawContent "[x] Surah Al-Baqarah" }} {{ $totalBaqarah = add $totalBaqarah 1 }} {{ end }}
-        {{ if in .RawContent "[x] Salatul Tahajjud" }} {{ $totalTahajjud = add $totalTahajjud 1 }} {{ end }}
+        {{ if and (in $c "[x]") (in $c "Surah Al-Baqarah") }} {{ $totalBaqarah = add $totalBaqarah 1 }} {{ end }}
+        {{ if and (in $c "[x]") (in $c "Salatul Tahajjud") }} {{ $totalTahajjud = add $totalTahajjud 1 }} {{ end }}
     {{ end }}
 
     {{/* 2. Spiritual Stat Cards */}}
@@ -45,39 +49,46 @@
         </div>
     </section>
 
-    {{/* 3. Weekly Salah Rhythm */}}
+    {{/* 3. Cumulative Prayer Breakdown */}}
+    <section style="margin-top: 4rem;">
+        <h2 style="text-align: center;">Prayer Breakdown</h2>
+        <div class="prayer-breakdown-grid">
+            <div class="prayer-stat"><span>Fajr</span> <strong>{{ $fajrCount }}</strong></div>
+            <div class="prayer-stat"><span>Dhuhr</span> <strong>{{ $dhuhrCount }}</strong></div>
+            <div class="prayer-stat"><span>Asr</span> <strong>{{ $asrCount }}</strong></div>
+            <div class="prayer-stat"><span>Maghrib</span> <strong>{{ $maghribCount }}</strong></div>
+            <div class="prayer-stat"><span>Isha</span> <strong>{{ $ishaCount }}</strong></div>
+        </div>
+    </section>
+
+    {{/* 4. Weekly Salah Adherence (No-Brainer Grid) */}}
     <section style="margin-top: 5rem;">
-        <h2 style="text-align: center;">Weekly Salah Adherence</h2>
-        <p style="text-align: center; font-size: 0.9rem; color: #777; margin-bottom: 2rem;">Consistency of the 5 daily prayers</p>
+        <h2 style="text-align: center;">Weekly Adherence</h2>
+        <p style="text-align: center; font-size: 0.9rem; color: #777; margin-bottom: 2rem;">Last 7 days of prayers</p>
         
-        <table class="charts-css column show-labels data-spacing-20 stacked" id="salah-chart">
-            <caption> Daily Salah Count </caption>
-            <tbody>
-                {{ range (first 7 $dailyLogs).Reverse }}
-                    {{ $count := 0 }}
-                    {{ if in .RawContent "[x] Fajr" }} {{ $count = add $count 1 }} {{ end }}
-                    {{ if in .RawContent "[x] Dhuhr" }} {{ $count = add $count 1 }} {{ end }}
-                    {{ if in .RawContent "[x] Asr" }} {{ $count = add $count 1 }} {{ end }}
-                    {{ if in .RawContent "[x] Maghrib" }} {{ $count = add $count 1 }} {{ end }}
-                    {{ if in .RawContent "[x] Isha" }} {{ $count = add $count 1 }} {{ end }}
-                    
-                    <tr>
-                        <th scope="row"> {{ .Date.Format "Mon" }} </th>
-                        <td style="--size: calc( {{ $count }} / 5 );"> 
-                            <span class="data"> {{ $count }}/5 </span> 
-                        </td>
-                        {{ if lt $count 5 }}
-                        <td class="target-ghost" style="--size: calc( {{ sub 5 $count }} / 5 );"></td>
-                        {{ end }}
-                    </tr>
-                {{ end }}
-            </tbody>
-        </table>
+        <div class="salah-tracker-grid">
+            <div class="tracker-header"></div>
+            <div class="tracker-header">F</div>
+            <div class="tracker-header">D</div>
+            <div class="tracker-header">A</div>
+            <div class="tracker-header">M</div>
+            <div class="tracker-header">I</div>
+
+            {{ range (first 7 $dailyLogs).Reverse }}
+                {{ $c := .RawContent }}
+                <div class="tracker-label">{{ .Date.Format "Mon" }}</div>
+                <div class="tracker-dot {{ if and (in $c "[x]") (in $c "Fajr") }}done{{ end }}" title="Fajr"></div>
+                <div class="tracker-dot {{ if and (in $c "[x]") (in $c "Dhuhr") }}done{{ end }}" title="Dhuhr"></div>
+                <div class="tracker-dot {{ if and (in $c "[x]") (in $c "Asr") }}done{{ end }}" title="Asr"></div>
+                <div class="tracker-dot {{ if and (in $c "[x]") (in $c "Maghrib") }}done{{ end }}" title="Maghrib"></div>
+                <div class="tracker-dot {{ if and (in $c "[x]") (in $c "Isha") }}done{{ end }}" title="Isha"></div>
+            {{ end }}
+        </div>
     </section>
 
     <hr style="margin: 5rem 0;">
 
-    {{/* 4. Dialogue List */}}
+    {{/* 5. Dialogue List */}}
     <section class="dialogue-archive">
         <h2>Dialogue Records</h2>
         <div class="list">
@@ -98,10 +109,70 @@
     border-top: 3px solid var(--accent-color) !important;
 }
 
-#salah-chart {
-    height: 250px;
-    max-width: 500px;
+/* Prayer Breakdown */
+.prayer-breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    max-width: 600px;
     margin: 2rem auto;
+}
+
+.prayer-stat {
+    text-align: center;
+    padding: 1rem;
+    background: #fcfbf9;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+.prayer-stat span {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #999;
+}
+
+.prayer-stat strong {
+    font-size: 1.5rem;
+    color: var(--accent-color);
+}
+
+/* Salah Tracker Grid */
+.salah-tracker-grid {
+    display: grid;
+    grid-template-columns: 80px repeat(5, 1fr);
+    gap: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.tracker-header {
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #999;
+}
+
+.tracker-label {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+.tracker-dot {
+    width: 24px;
+    height: 24px;
+    background: #ebedf0;
+    border-radius: 50%;
+    margin: 0 auto;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.tracker-dot.done {
+    background: var(--accent-color);
+    box-shadow: 0 0 8px rgba(85, 107, 47, 0.3);
 }
 
 .dialogue-card {
