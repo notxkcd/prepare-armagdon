@@ -23,7 +23,8 @@ Run this command in your terminal:
 make log
 ```
 *(Alternative: `./log-today.sh`)*
-This generates a file for today (e.g., `content/daily/2026-02-03.md`) pre-filled with your protocol.
+This generates a file for today (e.g., `content/daily/2026-02-03.md`).
+**Note:** The file title will automatically include the day of the week (e.g., `Daily Log - 2026-02-03 (Tuesday)`).
 
 ### 2. Track Real-Time (The Input)
 Open the generated file. You will see two critical sections:
