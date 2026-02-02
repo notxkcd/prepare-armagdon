@@ -1,5 +1,6 @@
 baseURL = 'https://notxkcd.github.io/prepare-armagdon/'
 relativeURLs = true
+uglyURLs = true
 languageCode = 'en-us'
 title = 'Armagdon Prep'
 theme = 'earth-focus'
@@ -7,21 +8,21 @@ theme = 'earth-focus'
 [menus]
   [[menus.main]]
     name = 'Philosophy'
-    url = '/philosophy/'
+    url = '/philosophy.html'
     weight = 10
   [[menus.main]]
     name = 'Daily Logs'
-    url = '/daily/'
+    url = '/daily.html'
     weight = 20
   [[menus.main]]
     name = 'Weekly/Monthly'
-    url = '/weekly/'
+    url = '/weekly.html'
     weight = 30
   [[menus.main]]
     name = 'Observer View'
-    url = '/observer/'
+    url = '/observer.html'
     weight = 40
   [[menus.main]]
     name = 'Essays'
-    url = '/essays/'
+    url = '/essays.html'
     weight = 50
