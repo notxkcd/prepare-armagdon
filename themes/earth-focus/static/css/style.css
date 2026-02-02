@@ -603,6 +603,16 @@ ul li::before {
 .progress-fill.learn { background-color: #a68b5a; }
 .progress-fill.body { background-color: #8c5e44; }
 
+.metric-label strong {
+    color: var(--text-color);
+}
+
+.target-muted {
+    font-weight: 400;
+    color: #aaa;
+    font-size: 0.8rem;
+}
+
 footer {
     margin-top: 6rem;
     padding-top: 2rem;

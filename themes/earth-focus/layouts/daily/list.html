@@ -14,7 +14,7 @@
                 <div class="metric-group">
                     <div class="metric-label">
                         <span><i class="fa-solid fa-brain"></i> Focus</span>
-                        <strong>{{ .Params.focus_hours | default 0 }}h</strong>
+                        <strong>{{ .Params.focus_hours | default 0 }}h <span class="target-muted">/ {{ .Params.focus_target | default 8 }}h</span></strong>
                     </div>
                     <div class="progress-track">
                         <div class="progress-fill work" style="width: {{ mul (div (.Params.focus_hours | default 0) (.Params.focus_target | default 8)) 100 }}%"></div>
@@ -24,7 +24,7 @@
                 <div class="metric-group">
                     <div class="metric-label">
                         <span><i class="fa-solid fa-book"></i> Learn</span>
-                        <strong>{{ .Params.learning_hours | default 0 }}h</strong>
+                        <strong>{{ .Params.learning_hours | default 0 }}h <span class="target-muted">/ {{ .Params.learning_target | default 4 }}h</span></strong>
                     </div>
                     <div class="progress-track">
                         <div class="progress-fill learn" style="width: {{ mul (div (.Params.learning_hours | default 0) (.Params.learning_target | default 4)) 100 }}%"></div>
@@ -34,7 +34,7 @@
                 <div class="metric-group">
                     <div class="metric-label">
                         <span><i class="fa-solid fa-person-running"></i> Body</span>
-                        <strong>{{ .Params.physical_hours | default 0 }}h</strong>
+                        <strong>{{ .Params.physical_hours | default 0 }}h <span class="target-muted">/ {{ .Params.physical_target | default 2 }}h</span></strong>
                     </div>
                     <div class="progress-track">
                         <div class="progress-fill body" style="width: {{ mul (div (.Params.physical_hours | default 0) (.Params.physical_target | default 2)) 100 }}%"></div>
