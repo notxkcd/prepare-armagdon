@@ -46,41 +46,79 @@
     <section>
         <h2>Recent Logs</h2>
         {{ range first 5 $dailyLogs }}
-        <div class="list-item summary-card">
-            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <div class="list-item summary-card daily-card status-{{ .Params.status | lower }}">
+            <header class="card-header">
+                <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+                <span class="status-pill {{ .Params.status | lower }}">{{ .Params.status | default "Pending" }}</span>
+            </header>
+
+            {{/* Metrics Row with Progress Bars */}}
+            <div class="metrics-dashboard">
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span><i class="fa-solid fa-brain"></i> Focus</span>
+                        <strong>{{ .Params.focus_hours | default 0 }}h</strong>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill work" style="width: {{ mul (div (.Params.focus_hours | default 0) 8) 100 }}%"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span><i class="fa-solid fa-book"></i> Learn</span>
+                        <strong>{{ .Params.learning_hours | default 0 }}h</strong>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill learn" style="width: {{ mul (div (.Params.learning_hours | default 0) 4) 100 }}%"></div>
+                    </div>
+                </div>
+
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span><i class="fa-solid fa-person-running"></i> Body</span>
+                        <strong>{{ .Params.physical_hours | default 0 }}h</strong>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill body" style="width: {{ mul (div (.Params.physical_hours | default 0) 2) 100 }}%"></div>
+                    </div>
+                </div>
+            </div>
             
-            {{/* Logic to parse completed vs unfinished */}}
+            {{/* Content Parsing Logic */}}
             {{ $content := .RawContent }}
             {{ $lines := split $content "\n" }}
             {{ $completed := slice }}
             {{ $unfinishedCount := 0 }}
             
             {{ range $lines }}
-                {{ if findRE "^- \\[x\\]" . }}
-                    {{/* Extract task name, remove '- [x] ' */}}
-                    {{ $cleanName := replaceRE "^- \\[x\\] " "" . }}
-                    {{/* Filter for key rituals to keep it brief */}}
-                    {{ if or (in $cleanName "Fajr") (in $cleanName "Dhuhr") (in $cleanName "Asr") (in $cleanName "Maghrib") (in $cleanName "Isha") (in $cleanName "Deep Work") (in $cleanName "Exercise") }}
-                        {{ $completed = $completed | append $cleanName }}
-                    {{ end }}
-                {{ else if findRE "^- \\[ \\]" . }}
+                {{ if in . "- [x]" }}
+                    {{ if in . "Fajr" }} {{ $completed = $completed | append "Fajr" }} {{ end }}
+                    {{ if in . "Dhuhr" }} {{ $completed = $completed | append "Dhuhr" }} {{ end }}
+                    {{ if in . "Asr" }} {{ $completed = $completed | append "Asr" }} {{ end }}
+                    {{ if in . "Maghrib" }} {{ $completed = $completed | append "Maghrib" }} {{ end }}
+                    {{ if in . "Isha" }} {{ $completed = $completed | append "Isha" }} {{ end }}
+                    {{ if in . "Deep Work" }} {{ $completed = $completed | append "Deep Work" }} {{ end }}
+                    {{ if in . "Exercise" }} {{ $completed = $completed | append "Exercise" }} {{ end }}
+                {{ else if in . "- [ ]" }}
                     {{ $unfinishedCount = add $unfinishedCount 1 }}
                 {{ end }}
             {{ end }}
 
-            <div class="log-summary">
+            <div class="log-summary" style="margin-top: 1.5rem;">
                 <div class="completed-preview">
-                    <strong>Completed Key Rituals:</strong>
                     {{ if $completed }}
                         <span class="ritual-tags">
                             {{ delimit $completed " • " }}
                         </span>
-                    {{ else }}
-                        <span style="color: #999;">None recorded</span>
                     {{ end }}
                 </div>
                 <div class="unfinished-stat">
-                    Unfinished Tasks: <span class="count-badge {{ if eq $unfinishedCount 0 }}zero{{ end }}">{{ $unfinishedCount }}</span>
+                    {{ if gt $unfinishedCount 0 }}
+                    <span class="count-badge">{{ $unfinishedCount }} tasks remaining</span>
+                    {{ else }}
+                    <span class="count-badge zero">All tasks cleared</span>
+                    {{ end }}
                 </div>
             </div>
         </div>
