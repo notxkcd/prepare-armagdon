@@ -29,3 +29,9 @@ note:
 # Clean up build artifacts and temporary files
 clean:
 	rm -rf public resources .hugo_build.lock
+
+# Automatically stage, commit with timestamp, and push to GitHub
+backup:
+	git add .
+	git commit -m "backup: $(shell date '+%Y-%m-%d %H:%M:%S')"
+	git push origin master
