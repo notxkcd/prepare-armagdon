@@ -172,9 +172,16 @@ ul li::before {
     transform: scale(1.05);
 }
 
-.task-list-item input[type="checkbox"]:checked {
+.task-list-item input[type="checkbox"]:checked,
+.task-list-item input[type="checkbox"][checked],
+.task-list-item input[type="checkbox"]:disabled:checked {
   border-color: var(--accent-color);
   background-color: rgba(85, 107, 47, 0.15); /* Light green fill */
+  opacity: 1; /* Override default disabled opacity */
+}
+
+.task-list-item input[type="checkbox"]:disabled {
+    cursor: default;
 }
 
 .task-list-item input[type="checkbox"]:checked::after {
