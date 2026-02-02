@@ -1,0 +1,114 @@
+{{ define "main" }}
+<article class="spiritual-dashboard">
+    <header class="stats-header" style="text-align: center; margin-bottom: 4rem;">
+        <span class="sacred-label">Spiritual Foundation</span>
+        <h1 style="margin-top: 1rem;">Communication with God</h1>
+        <p class="meta">Adherence to the protocol and records of dialogue.</p>
+    </header>
+
+    {{/* 1. Aggregate Faith Data */}}
+    {{ $dailyLogs := where .Site.RegularPages "Section" "daily" }}
+    {{ $totalSalah := 0 }}
+    {{ $totalBaqarah := 0 }}
+    {{ $totalTahajjud := 0 }}
+    {{ $daysTracked := len $dailyLogs }}
+
+    {{ range $dailyLogs }}
+        {{/* Count Salah */}}
+        {{ if in .RawContent "[x] Fajr" }} {{ $totalSalah = add $totalSalah 1 }} {{ end }}
+        {{ if in .RawContent "[x] Dhuhr" }} {{ $totalSalah = add $totalSalah 1 }} {{ end }}
+        {{ if in .RawContent "[x] Asr" }} {{ $totalSalah = add $totalSalah 1 }} {{ end }}
+        {{ if in .RawContent "[x] Maghrib" }} {{ $totalSalah = add $totalSalah 1 }} {{ end }}
+        {{ if in .RawContent "[x] Isha" }} {{ $totalSalah = add $totalSalah 1 }} {{ end }}
+        
+        {{/* Count Recurring */}}
+        {{ if in .RawContent "[x] Surah Al-Baqarah" }} {{ $totalBaqarah = add $totalBaqarah 1 }} {{ end }}
+        {{ if in .RawContent "[x] Salatul Tahajjud" }} {{ $totalTahajjud = add $totalTahajjud 1 }} {{ end }}
+    {{ end }}
+
+    {{/* 2. Spiritual Stat Cards */}}
+    <section class="dashboard-grid">
+        <div class="stat-card sacred-card">
+            <span class="stat-label">Total Salah</span>
+            <span class="stat-value">{{ $totalSalah }}</span>
+            <span class="stat-sub">Across {{ $daysTracked }} days</span>
+        </div>
+        <div class="stat-card sacred-card">
+            <span class="stat-label">Al-Baqarah</span>
+            <span class="stat-value">{{ $totalBaqarah }}</span>
+            <span class="stat-sub">Completions</span>
+        </div>
+        <div class="stat-card sacred-card">
+            <span class="stat-label">Tahajjud</span>
+            <span class="stat-value">{{ $totalTahajjud }}</span>
+            <span class="stat-sub">Vigils</span>
+        </div>
+    </section>
+
+    {{/* 3. Weekly Salah Rhythm */}}
+    <section style="margin-top: 4rem;">
+        <h2 style="text-align: center;">Weekly Salah Adherence</h2>
+        <table class="charts-css column show-labels data-spacing-10 stacked" id="salah-chart">
+            <caption> Daily Salah Count </caption>
+            <tbody>
+                {{ range (first 7 $dailyLogs).Reverse }}
+                    {{ $count := 0 }}
+                    {{ if in .RawContent "[x] Fajr" }} {{ $count = add $count 1 }} {{ end }}
+                    {{ if in .RawContent "[x] Dhuhr" }} {{ $count = add $count 1 }} {{ end }}
+                    {{ if in .RawContent "[x] Asr" }} {{ $count = add $count 1 }} {{ end }}
+                    {{ if in .RawContent "[x] Maghrib" }} {{ $count = add $count 1 }} {{ end }}
+                    {{ if in .RawContent "[x] Isha" }} {{ $count = add $count 1 }} {{ end }}
+                    
+                    <tr>
+                        <th scope="row"> {{ .Date.Format "Mon" }} </th>
+                        <td style="--size: calc( {{ $count }} / 5 ); background-color: var(--accent-color);"> 
+                            <span class="data"> {{ $count }}/5 </span> 
+                        </td>
+                        {{ if lt $count 5 }}
+                        <td class="target-ghost" style="--size: calc( {{ sub 5 $count }} / 5 );"></td>
+                        {{ end }}
+                    </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </section>
+
+    <hr style="margin: 5rem 0;">
+
+    {{/* 4. Dialogue List */}}
+    <section class="dialogue-archive">
+        <h2>Dialogue Records</h2>
+        <div class="list">
+            {{ range .Pages.ByDate.Reverse }}
+            <div class="list-item summary-card dialogue-card">
+                <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+                <span class="meta">{{ .Date.Format "January 2, 2006" }}</span>
+                <p>{{ .Summary }}</p>
+                <a href="{{ .RelPermalink }}" style="font-family: 'Patrick Hand', cursive; text-decoration: none;">Read Dialogue &rarr;</a>
+            </div>
+            {{ end }}
+        </div>
+    </section>
+</article>
+
+<style>
+.sacred-card {
+    border-top: 3px solid var(--accent-color) !important;
+}
+
+#salah-chart {
+    height: 250px;
+    max-width: 500px;
+    margin: 2rem auto;
+}
+
+.dialogue-card {
+    border-left: 2px solid #e6e2da;
+    padding-left: 1.5rem !important;
+}
+
+.dialogue-card:hover {
+    border-left-color: var(--accent-color);
+}
+</style>
+{{ end }}
