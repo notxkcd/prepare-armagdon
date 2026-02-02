@@ -46,9 +46,43 @@
     <section>
         <h2>Recent Logs</h2>
         {{ range first 5 $dailyLogs }}
-        <div class="list-item">
+        <div class="list-item summary-card">
             <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-            <span class="meta">{{ .Date.Format "Jan 2, 2006" }} — <strong>{{ .Params.status | default "Logged" }}</strong></span>
+            
+            {{/* Logic to parse completed vs unfinished */}}
+            {{ $content := .RawContent }}
+            {{ $lines := split $content "\n" }}
+            {{ $completed := slice }}
+            {{ $unfinishedCount := 0 }}
+            
+            {{ range $lines }}
+                {{ if findRE "^- \\[x\\]" . }}
+                    {{/* Extract task name, remove '- [x] ' */}}
+                    {{ $cleanName := replaceRE "^- \\[x\\] " "" . }}
+                    {{/* Filter for key rituals to keep it brief */}}
+                    {{ if or (in $cleanName "Fajr") (in $cleanName "Dhuhr") (in $cleanName "Asr") (in $cleanName "Maghrib") (in $cleanName "Isha") (in $cleanName "Deep Work") (in $cleanName "Exercise") }}
+                        {{ $completed = $completed | append $cleanName }}
+                    {{ end }}
+                {{ else if findRE "^- \\[ \\]" . }}
+                    {{ $unfinishedCount = add $unfinishedCount 1 }}
+                {{ end }}
+            {{ end }}
+
+            <div class="log-summary">
+                <div class="completed-preview">
+                    <strong>Completed Key Rituals:</strong>
+                    {{ if $completed }}
+                        <span class="ritual-tags">
+                            {{ delimit $completed " • " }}
+                        </span>
+                    {{ else }}
+                        <span style="color: #999;">None recorded</span>
+                    {{ end }}
+                </div>
+                <div class="unfinished-stat">
+                    Unfinished Tasks: <span class="count-badge {{ if eq $unfinishedCount 0 }}zero{{ end }}">{{ $unfinishedCount }}</span>
+                </div>
+            </div>
         </div>
         {{ end }}
     </section>

@@ -454,6 +454,155 @@ ul li::before {
     padding-left: 10px;
 }
 
+/* Log Summary Card */
+.summary-card {
+    background: #fff;
+    padding: 1.2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: transform 0.2s;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-color);
+}
+
+.summary-card h3 {
+    margin-top: 0;
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+}
+
+.log-summary {
+    font-size: 0.9rem;
+    color: #555;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ritual-tags {
+    color: var(--accent-color);
+    font-weight: 600;
+    font-family: 'Patrick Hand', cursive;
+}
+
+.unfinished-stat {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 0.3rem;
+}
+
+.count-badge {
+    background: #e6e2da;
+    color: #666;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.count-badge.zero {
+    background: #e6f0e6;
+    color: var(--accent-color);
+}
+
+/* Rich Daily Card */
+.daily-card {
+    border-left: 4px solid #ccc;
+    padding-left: 1.5rem;
+}
+
+.daily-card.status-complete { border-left-color: var(--accent-color); }
+.daily-card.status-partial { border-left-color: #a68b5a; }
+.daily-card.status-fail { border-left-color: #8c5e44; }
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.status-pill {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    background: #eee;
+    color: #666;
+}
+
+.status-pill.complete { background: #e6f0e6; color: var(--accent-color); }
+.status-pill.partial { background: #fcf8e3; color: #a68b5a; }
+.status-pill.fail { background: #f8ebe6; color: #8c5e44; }
+
+.meta-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.meta-item i {
+    margin-right: 4px;
+    color: var(--accent-color);
+}
+
+.completed-preview {
+    margin-bottom: 0.5rem;
+}
+
+/* Metrics Dashboard */
+.metrics-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin: 1rem 0;
+}
+
+.metric-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.metric-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-family: 'Courier New', monospace;
+    color: #666;
+}
+
+.progress-track {
+    width: 100%;
+    height: 6px;
+    background: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 10px;
+}
+
+.progress-fill.work { background-color: #3d4a26; }
+.progress-fill.learn { background-color: #a68b5a; }
+.progress-fill.body { background-color: #8c5e44; }
+
 footer {
     margin-top: 6rem;
     padding-top: 2rem;

@@ -1,0 +1,84 @@
+{{ define "main" }}
+    <h1>{{ .Title }}</h1>
+    
+    <div class="list daily-archive">
+        {{ range .Pages }}
+        <div class="list-item summary-card daily-card status-{{ .Params.status | lower }}">
+            <header class="card-header">
+                <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+                <span class="status-pill {{ .Params.status | lower }}">{{ .Params.status | default "Pending" }}</span>
+            </header>
+
+            {{/* Metrics Row with Progress Bars */}}
+            <div class="metrics-dashboard">
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span><i class="fa-solid fa-brain"></i> Focus</span>
+                        <strong>{{ .Params.focus_hours | default 0 }}h</strong>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill work" style="width: {{ mul (div (.Params.focus_hours | default 0) 8) 100 }}%"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span><i class="fa-solid fa-book"></i> Learn</span>
+                        <strong>{{ .Params.learning_hours | default 0 }}h</strong>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill learn" style="width: {{ mul (div (.Params.learning_hours | default 0) 4) 100 }}%"></div>
+                    </div>
+                </div>
+
+                <div class="metric-group">
+                    <div class="metric-label">
+                        <span><i class="fa-solid fa-person-running"></i> Body</span>
+                        <strong>{{ .Params.physical_hours | default 0 }}h</strong>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill body" style="width: {{ mul (div (.Params.physical_hours | default 0) 2) 100 }}%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            {{/* Content Parsing Logic */}}
+            {{ $content := .RawContent }}
+            {{ $lines := split $content "\n" }}
+            {{ $completed := slice }}
+            {{ $unfinishedCount := 0 }}
+            
+            {{ range $lines }}
+                {{ if in . "- [x]" }}
+                    {{ if in . "Fajr" }} {{ $completed = $completed | append "Fajr" }} {{ end }}
+                    {{ if in . "Dhuhr" }} {{ $completed = $completed | append "Dhuhr" }} {{ end }}
+                    {{ if in . "Asr" }} {{ $completed = $completed | append "Asr" }} {{ end }}
+                    {{ if in . "Maghrib" }} {{ $completed = $completed | append "Maghrib" }} {{ end }}
+                    {{ if in . "Isha" }} {{ $completed = $completed | append "Isha" }} {{ end }}
+                    {{ if in . "Deep Work" }} {{ $completed = $completed | append "Deep Work" }} {{ end }}
+                    {{ if in . "Exercise" }} {{ $completed = $completed | append "Exercise" }} {{ end }}
+                {{ else if in . "- [ ]" }}
+                    {{ $unfinishedCount = add $unfinishedCount 1 }}
+                {{ end }}
+            {{ end }}
+
+            <div class="log-summary" style="margin-top: 1.5rem;">
+                <div class="completed-preview">
+                    {{ if $completed }}
+                        <span class="ritual-tags">
+                            {{ delimit $completed " • " }}
+                        </span>
+                    {{ end }}
+                </div>
+                <div class="unfinished-stat">
+                    {{ if gt $unfinishedCount 0 }}
+                    <span class="count-badge">{{ $unfinishedCount }} tasks remaining</span>
+                    {{ else }}
+                    <span class="count-badge zero">All tasks cleared</span>
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+        {{ end }}
+    </div>
+{{ end }}
