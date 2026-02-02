@@ -1,4 +1,5 @@
 baseURL = 'https://notxkcd.github.io/prepare-armagdon/'
+relativeURLs = true
 languageCode = 'en-us'
 title = 'Armagdon Prep'
 theme = 'earth-focus'
