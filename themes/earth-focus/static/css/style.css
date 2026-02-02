@@ -353,55 +353,35 @@ ul li::before {
     font-family: 'Patrick Hand', cursive;
 }
 
-#weekly-chart, #daily-rhythm-chart {
+#weekly-chart, #daily-rhythm-chart, #salah-chart {
     height: 300px;
     max-width: 500px;
     margin: 3rem auto;
     font-family: 'Patrick Hand', cursive;
 }
 
-#weekly-chart td, #daily-rhythm-chart td {
+#weekly-chart td, #daily-rhythm-chart td, #salah-chart td {
     background-color: var(--color);
     border-radius: 4px 4px 0 0;
     transition: opacity 0.2s;
 }
 
-#daily-rhythm-chart td {
-    background-color: var(--accent-color); /* Default green for Daily Rhythm */
+#daily-rhythm-chart td, #salah-chart td {
+    background-color: var(--accent-color); /* Default green */
     opacity: 0.8;
 }
 
-#weekly-chart td:hover, #daily-rhythm-chart td:hover {
+#weekly-chart td:hover, #daily-rhythm-chart td:hover, #salah-chart td:hover {
     opacity: 0.9;
 }
 
-#weekly-chart th, #daily-rhythm-chart th {
+#weekly-chart th, #daily-rhythm-chart th, #salah-chart th {
     font-size: 1.1rem;
-    padding-top: 25px; /* Increased padding for more space between label and bar */
+    padding-top: 25px;
     color: var(--text-color);
 }
 
-/* Styles for Target 'Ghost' Bars */
-.target-ghost {
-    background-color: transparent !important;
-    border: 2px dashed #dcd8d0;
-    border-bottom: none;
-    border-radius: 4px 4px 0 0;
-}
-
-#daily-rhythm-chart.stacked td {
-    border-radius: 0; /* Flat bottom/top for stacking */
-}
-
-#daily-rhythm-chart.stacked td:first-of-type {
-    border-radius: 0 0 0 0;
-}
-
-#daily-rhythm-chart.stacked td.target-ghost {
-    border-radius: 4px 4px 0 0;
-}
-
-#weekly-chart .data, #daily-rhythm-chart .data {
+#weekly-chart .data, #daily-rhythm-chart .data, #salah-chart .data {
     font-weight: 700;
     font-size: 1.1rem;
     color: var(--text-color);
@@ -409,6 +389,15 @@ ul li::before {
     text-align: center;
     width: 100%;
     display: block;
+}
+
+/* Shared Stacked Chart Logic */
+#daily-rhythm-chart.stacked td, #salah-chart.stacked td {
+    border-radius: 0;
+}
+
+#daily-rhythm-chart.stacked td.target-ghost, #salah-chart.stacked td.target-ghost {
+    border-radius: 4px 4px 0 0;
 }
 
 /* Donut Chart */

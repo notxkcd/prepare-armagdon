@@ -46,9 +46,11 @@
     </section>
 
     {{/* 3. Weekly Salah Rhythm */}}
-    <section style="margin-top: 4rem;">
+    <section style="margin-top: 5rem;">
         <h2 style="text-align: center;">Weekly Salah Adherence</h2>
-        <table class="charts-css column show-labels data-spacing-10 stacked" id="salah-chart">
+        <p style="text-align: center; font-size: 0.9rem; color: #777; margin-bottom: 2rem;">Consistency of the 5 daily prayers</p>
+        
+        <table class="charts-css column show-labels data-spacing-20 stacked" id="salah-chart">
             <caption> Daily Salah Count </caption>
             <tbody>
                 {{ range (first 7 $dailyLogs).Reverse }}
@@ -61,7 +63,7 @@
                     
                     <tr>
                         <th scope="row"> {{ .Date.Format "Mon" }} </th>
-                        <td style="--size: calc( {{ $count }} / 5 ); background-color: var(--accent-color);"> 
+                        <td style="--size: calc( {{ $count }} / 5 );"> 
                             <span class="data"> {{ $count }}/5 </span> 
                         </td>
                         {{ if lt $count 5 }}
