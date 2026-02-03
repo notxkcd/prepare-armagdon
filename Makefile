@@ -12,9 +12,11 @@ help:
 	@echo "make build   - Build the final static site"
 	@echo "make log     - Create today's Daily Log"
 	@echo "make task    - Add a new task to today's log"
+	@echo "make scratch - Capture a fleeting thought"
 	@echo "make note    - Create a new note (tech/essays/philosophy)"
 	@echo "make pomo    - Start a Pomodoro focus session"
 	@echo "make show    - Show today's status dashboard"
+	@echo "make check   - Toggle tasks interactively"
 	@echo "make backup  - Commit and push changes to GitHub"
 	@echo "make clean   - Remove build artifacts"
 
@@ -25,6 +27,7 @@ serve:
 # Build the final static site for production (outputs to /public)
 build:
 	hugo --minify
+	npx pagefind --site public --output-path public/_pagefind
 
 # Create today's Daily Log using the ritual archetype
 log:
@@ -33,6 +36,10 @@ log:
 # Append a new task to today's Daily Log from the terminal
 task:
 	@read -p "Enter task: " TASK; ./log-task.sh "$$TASK"
+
+# Capture a quick thought and append it to today's reflections
+scratch:
+	python3 scratch.py
 
 # Create a new note in a specific section (tech, essays, or philosophy)
 note:
@@ -47,6 +54,10 @@ pomo:
 # Show today's tasks and metrics in a beautiful terminal dashboard
 show:
 	python3 show_tasks.py
+
+# Toggle today's tasks interactively
+check:
+	python3 check_tasks.py
 
 # Clean up build artifacts and temporary files
 clean:

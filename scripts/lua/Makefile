@@ -8,6 +8,7 @@ help:
 	@echo "-----------------"
 	@echo "make show  - Run the lua status dashboard"
 	@echo "make pomo  - Run the lua focus loop"
+	@echo "make demo  - Run the library capability demo"
 
 # Run the status dashboard
 show:
@@ -15,4 +16,7 @@ show:
 
 # Run the focus loop (Pomodoro)
 pomo:
+
+demo:
+	./demo.lua
 	./pomo.lua

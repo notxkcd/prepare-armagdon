@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ $charts.RelPermalink }}">
     {{ end }}
     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+    <link href="/_pagefind/pagefind-ui.css" rel="stylesheet">
+    <script src="/_pagefind/pagefind-ui.js"></script>
 </head>
 <body>
     {{ partial "header.html" . }}
@@ -20,5 +22,15 @@
         {{ block "main" . }}{{ end }}
     </main>
     {{ partial "footer.html" . }}
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            new PagefindUI({ 
+                element: "#search", 
+                showSubResults: true,
+                baseUrl: "/",
+                bundlePath: "/_pagefind/"
+            });
+        });
+    </script>
 </body>
 </html>

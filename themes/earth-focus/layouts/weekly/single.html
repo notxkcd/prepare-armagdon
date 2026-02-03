@@ -131,6 +131,48 @@
         </table>
     </section>
 
+    <section>
+        <h3 style="margin-top: 3rem; text-align: center;">Daily Peak Hours (Pomodoros)</h3>
+        <p class="meta" style="text-align: center;">When you are most active during the day.</p>
+        
+        {{/* 1. Extract and count hours from all weekly logs */}}
+        {{ $hourCounts := dict }}
+        {{ range seq 0 23 }}
+            {{ $hourCounts = merge $hourCounts (dict (string .) 0) }}
+        {{ end }}
+
+        {{ range $weeklyLogs }}
+            {{ $timestamps := findRE `\[([0-9]{2}):[0-9]{2}\]` .Content }}
+            {{ range $timestamps }}
+                {{ $hour := index (findRE `[0-9]{2}` .) 0 }}
+                {{ $currentCount := index $hourCounts $hour }}
+                {{ $hourCounts = merge $hourCounts (dict $hour (add $currentCount 1)) }}
+            {{ end }}
+        {{ end }}
+
+        {{/* 2. Find the max count for scaling */}}
+        {{ $maxCount := 1 }}
+        {{ range $hour, $count := $hourCounts }}
+            {{ if gt $count $maxCount }} {{ $maxCount = $count }} {{ end }}
+        {{ end }}
+
+        <table class="charts-css column show-labels data-spacing-2" id="peak-chart">
+            <caption> Pomodoro completions by hour </caption>
+            <tbody>
+                {{ range $h := seq 4 23 }} {{/* Focused on 4AM to Midnight */}}
+                    {{ $hourStr := printf "%02d" $h }}
+                    {{ $count := index $hourCounts $hourStr }}
+                    <tr>
+                        <th scope="row"> {{ $hourStr }} </th>
+                        <td style="--size: calc( {{ $count }} / {{ $maxCount }} ); --color: var(--accent-color);">
+                            {{ if gt $count 0 }}<span class="data">{{ $count }}</span>{{ end }}
+                        </td>
+                    </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </section>
+
     <hr style="margin: 3rem 0;">
 
     <section class="content">

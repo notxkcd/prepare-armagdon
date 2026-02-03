@@ -698,6 +698,41 @@ ul li::before {
     }
 }
 
+/* Pagefind UI Overrides */
+#search {
+    --pagefind-ui-primary: var(--accent-color);
+    --pagefind-ui-text: var(--text-color);
+    --pagefind-ui-background: var(--bg-color);
+    --pagefind-ui-border: var(--border-color);
+    --pagefind-ui-tag: #eee;
+    font-family: 'Lora', serif;
+}
+
+#search .pagefind-ui__search-input {
+    font-family: 'Patrick Hand', cursive;
+    #peak-chart {
+    height: 150px;
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+#peak-chart td {
+    background-color: var(--accent-color);
+    opacity: 0.6;
+    border-radius: 2px 2px 0 0;
+}
+
+#peak-chart th {
+    font-size: 0.7rem;
+    color: #888;
+}
+
+#peak-chart .data {
+    font-size: 0.7rem;
+    color: #555;
+    margin-top: -15px;
+}
+
 footer {
     margin-top: 6rem;
     padding-top: 2rem;
