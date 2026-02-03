@@ -28,7 +28,7 @@ note:
 
 # Start a 25-minute Pomodoro session (automatically updates today's focus_hours)
 pomo:
-	./pomo.sh
+	python3 pomo.py
 
 # Clean up build artifacts and temporary files
 clean:

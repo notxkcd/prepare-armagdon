@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     {{ $charts := resources.Get "charts.min.css" }}
     {{ if $charts }}
-    <link rel="stylesheet" href="{{ $charts.Permalink }}">
+    <link rel="stylesheet" href="{{ $charts.RelPermalink }}">
     {{ end }}
-    <link rel="stylesheet" href="{{ "css/style.css" | absURL }}">
+    <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
 </head>
 <body>
     {{ partial "header.html" . }}
