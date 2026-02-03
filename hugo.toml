@@ -7,7 +7,7 @@ theme = 'earth-focus'
 
 [menus]
   [[menus.main]]
-    name = 'Dialogue'
+    name = 'Spirituality'
     url = '/communication/'
     weight = 5
   [[menus.main]]

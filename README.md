@@ -182,6 +182,7 @@ The rules are purely a mental model and a template. To change your wake-up time 
     *   *Note:* You can customize these targets per day in the file's metadata.
 *   **Ritual Summaries:** The system scans the body of your daily logs for specific keywords marked as completed (`[x]`).
     *   **Tracked Keywords:** `Fajr`, `Dhuhr`, `Asr`, `Maghrib`, `Isha`, `Deep Work`, `Exercise`.
+*   **Spirituality Dashboard:** A dedicated section that aggregates total Salah, Baqarah, and Tahajjud completions into high-level stat cards and a consistency grid.
 *   **Unfinished Tasks:** The system counts every instance of an empty checkbox (`[ ]`) found in the file, including rituals and ad-hoc tasks.
 
 ### Script Logic

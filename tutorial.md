@@ -139,17 +139,34 @@ make pomo
 
 ---
 
-## Part 7: Maintenance & Customization
+## Part 12: Learning Scripts (Bash & Lua)
 
-### Changing the "Default" Day
-Edit `archetypes/daily.md`.
+For educational purposes, equivalent versions of the system's core tools have been implemented in **Bash** and **Lua**. These are located in the `scripts/` directory.
 
-### Adjusting Chart Scales
-*   **Observer Chart:** Edit `themes/earth-focus/layouts/_default/observer.html`.
+### 1. Bash Versions
+Navigate to `scripts/bash/` to see how the system can be built using standard Linux utilities like `grep`, `sed`, and `bc`.
+*   `make show` (Bash version)
+*   `make pomo` (Bash version)
+
+### 2. Lua Versions
+Navigate to `scripts/lua/` to explore a version built with a lightweight, embedded language known for its fast pattern matching and simple file I/O.
+*   `make show` (Lua version)
+*   `make pomo` (Lua version)
+
+These versions are focused on code readability and demonstrate different programming paradigms.
 
 ---
 
-## Part 8: Troubleshooting
+## Part 13: Spirituality Dashboard
+
+The **Spirituality** section (formerly Dialogue) is the core of your faith tracking.
+1.  **Automated Metrics:** It automatically counts your Salah completions across all logs.
+2.  **Visual Adherence:** Shows a 7-day grid of your prayer consistency.
+3.  **Spiritual Records:** List of your reflections and dialogues with the Divine.
+
+---
+
+## Part 14: Troubleshooting
 
 **Q: Search isn't working.**
 A: Run `make build` to index your files.
