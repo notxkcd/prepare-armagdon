@@ -3,6 +3,7 @@ import os
 import re
 import time
 import sys
+import subprocess
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
@@ -22,6 +23,27 @@ TEXT = "#2d2a26"    # Soft Black
 PAPER = "#fcfbf9"   # Warm White
 
 console = Console()
+
+def play_alert():
+    """Plays an alarming sound using system tools."""
+    # 1. Try paplay (PulseAudio) with a system alarm sound
+    try:
+        subprocess.run(["paplay", "/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"], check=True, stderr=subprocess.DEVNULL)
+        return
+    except:
+        pass
+
+    # 2. Try aplay (ALSA)
+    try:
+        subprocess.run(["aplay", "/usr/share/sounds/freedesktop/stereo/complete.oga"], check=True, stderr=subprocess.DEVNULL)
+        return
+    except:
+        pass
+
+    # 3. Fallback to terminal bell (multiple times)
+    for _ in range(3):
+        print("\a", end="", flush=True)
+        time.sleep(0.2)
 
 def get_today_file():
     date_str = datetime.now().strftime("%Y-%m-%d")
@@ -46,7 +68,7 @@ def parse_log(filepath):
             current_section = header_match.group(1).strip()
         
         # Detect Tasks: - [ ] [HH:MM] Task Name
-        task_match = re.match(r'^-\s+\[[ xX]\]\s+(\[[0-9]{2}:[0-9]{2}\])?\s*(.*)', line)
+        task_match = re.match(r'^-\s+\[[ xX]\]\s+(\[[0-9]{{2}}:[0-9]{{2}}\])?\s*(.*)', line)
         if task_match:
             raw_name = task_match.group(2).strip()
             # Clean name from previous tomatoes for matching
@@ -88,8 +110,8 @@ def update_file(filepath, task_name, metric, lines):
         # We use a loose match for the task name to handle existing tomatoes/timestamps
         if task_name in line and not found_task:
             # Replace or add timestamp [HH:MM]
-            if re.search(r'\[[0-9]{2}:[0-9]{2}\]', line):
-                line = re.sub(r'\[[0-9]{2}:[0-9]{2}\]', f'[{now_time}]', line)
+            if re.search(r'\[[0-9]{{2}}:[0-9]{{2}}\]', line):
+                line = re.sub(r'\[[0-9]{{2}}:[0-9]{{2}}\]', f'[{now_time}]', line)
             else:
                 line = line.replace("- [ ] ", f"- [ ] [{now_time}] ")
             
@@ -117,6 +139,8 @@ def run_timer(duration_mins, description, color):
         while not progress.finished:
             progress.update(task, advance=1)
             time.sleep(1)
+    
+    play_alert() # Sound the alarm when done
 
 def main():
     console.clear()
@@ -132,7 +156,7 @@ def main():
     table = Table(title="Today's Protocol", box=box.SIMPLE, header_style=f"bold {ACCENT}", border_style=ACCENT)
     table.add_column("ID", justify="right", style="dim")
     table.add_column("Task", ratio=1)
-    table.add_column("Category", style="italic")
+    table.add_column("Category", style=f"bold italic #fcfbf9 on {ACCENT}", justify="center")
 
     for i, t in enumerate(tasks):
         table.add_row(str(i+1), t['name'], t['category'].replace('_', ' ').title())

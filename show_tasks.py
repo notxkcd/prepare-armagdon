@@ -85,7 +85,7 @@ def main():
     t_table = Table(title="Daily Protocol", box=box.SIMPLE, header_style=f"bold {ACCENT}", border_style=ACCENT, expand=True)
     t_table.add_column("Status", justify="center", width=8)
     t_table.add_column("Task", ratio=1)
-    t_table.add_column("Section", style="italic dim")
+    t_table.add_column("Section", style=f"bold italic #fcfbf9 on {ACCENT}", justify="center")
 
     for t in tasks:
         mark = "[bold green]DONE[/bold green]" if t['done'] else "[dim]PENDING[/dim]"
