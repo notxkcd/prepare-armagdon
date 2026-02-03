@@ -1,49 +1,45 @@
 #!/usr/bin/env lua
 
--- Colors
-local green  = "\27[32m"
-local yellow = "\27[33m"
-local bold   = "\27[1m"
-local dim    = "\27[2m"
-local reset  = "\27[0m"
-local accent = "\27[38;5;64m" -- Muted Green (closest to #556b2f)
+-- Add current directory to path for local requires
+package.path = package.path .. ";scripts/lua/?.lua;./?.lua"
+local C = require("ansi-colors")
 
 local date = os.date("%Y-%m-%d")
 local filename = "content/daily/" .. date .. ".md"
 
 local file = io.open(filename, "r")
 if not file then
-    print(bold .. "⚠️  Log not found: " .. reset .. filename)
+    print(C.bold .. "⚠️  Log not found: " .. C.reset .. filename)
     os.exit(1)
 end
 
-print(bold .. accent .. "==========================================" .. reset)
-print(bold .. "   ARMAGDON STATUS (LUA) - " .. os.date("%A, %B %d"))
-print(bold .. accent .. "==========================================" .. reset)
+print(C.bold .. C.accent .. "==========================================" .. C.reset)
+print(C.bold .. "   ARMAGDON STATUS (LUA) - " .. os.date("%A, %B %d"))
+print(C.bold .. C.accent .. "==========================================" .. C.reset)
 
-print(bold .. "METRICS:" .. reset)
+print(C.bold .. "METRICS:" .. C.reset)
 for line in file:lines() do
     -- Match metrics in frontmatter
     local key, val = line:match("^(%w+_hours):%s*(%d+%.?%d*)")
     if key then
-        print(string.format("  • " .. yellow .. "%-15s" .. reset .. ": " .. bold .. "%s" .. reset, key, val))
+        print(string.format("  • " .. C.yellow .. "%-15s" .. C.reset .. ": " .. C.bold .. "%s" .. C.reset, key, val))
     end
     
     local status = line:match("^status:%s*\"([^"]+)\"")
     if status then
-        print(string.format("  • " .. yellow .. "%-15s" .. reset .. ": " .. bold .. "%s" .. reset, "Status", status))
+        print(string.format("  • " .. C.yellow .. "%-15s" .. C.reset .. ": " .. C.bold .. "%s" .. C.reset, "Status", status))
     end
 
     -- Match tasks
-    local done, task = line:match("^-%s+%\\[([ xX])\\]%s+(.*)")
+    local done, task = line:match("^-%s+%[" .. "([ xX])" .. "]%s+(.*)")
     if task then
         if done == " " then
-            print("  [" .. yellow .. "PENDING" .. reset .. "] " .. task)
+            print("  [" .. C.yellow .. "PENDING" .. C.reset .. "] " .. task)
         else
-            print("  [" .. green .. "DONE" .. reset .. "   ] " .. dim .. task .. reset)
+            print("  [" .. C.green .. "DONE" .. C.reset .. "   ] " .. C.dim .. task .. C.reset)
         end
     end
 end
 
 file:close()
-print(bold .. accent .. "==========================================" .. reset)
+print(C.bold .. C.accent .. "==========================================" .. C.reset)

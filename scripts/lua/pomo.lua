@@ -1,13 +1,8 @@
 #!/usr/bin/env lua
 
--- Colors
-local green  = "\27[32m"
-local yellow = "\27[33m"
-local blue   = "\27[34m"
-local bold   = "\27[1m"
-local dim    = "\27[2m"
-local reset  = "\27[0m"
-local accent = "\27[38;5;64m"
+-- Add current directory to path for local requires
+package.path = package.path .. ";scripts/lua/?.lua;./?.lua"
+local C = require("ansi-colors")
 
 local POMO_INC = 0.42
 local DURATION = 25
@@ -20,7 +15,7 @@ local function render_bar(percent, color)
     local width = 20
     local filled = math.floor(percent * width / 100)
     local empty = width - filled
-    return color .. string.rep("█", filled) .. reset .. dim .. string.rep("░", empty) .. reset
+    return color .. string.rep("█", filled) .. C.reset .. C.dim .. string.rep("░", empty) .. C.reset
 end
 
 local function run_timer(mins, label, color)
@@ -32,12 +27,12 @@ local function run_timer(mins, label, color)
         local percent = 100 - (seconds / total * 100)
         local bar = render_bar(percent, color)
         
-        io.write(string.format("\r%s %s [%02d:%02d] %s", bar, bold .. label .. reset, m, s, reset))
+        io.write(string.format("\r%s %s [%02d:%02d] %s", bar, C.bold .. label .. C.reset, m, s, C.reset))
         io.flush()
         os.execute("sleep 1")
         seconds = seconds - 1
     end
-    print("\n" .. green .. bold .. "✅ " .. label .. " Complete!" .. reset)
+    print("\n" .. C.green .. C.bold .. "✅ " .. label .. " Complete!" .. C.reset)
 end
 
 local function update_log(filename, task_name, metric)
@@ -64,30 +59,30 @@ end
 -- Main Loop
 while true do
     os.execute("clear")
-    print(bold .. accent .. "--- Lua Focus Loop ---" .. reset)
+    print(C.bold .. C.accent .. "--- Lua Focus Loop ---" .. C.reset)
     local filename = get_filename()
     local tasks = {}
     local f = io.open(filename, "r")
-    if not f then print(yellow .. "No log found." .. reset); break end
+    if not f then print(C.yellow .. "No log found." .. C.reset); break end
     for line in f:lines() do
         local done, name = line:match("^-%s+%[([ ])%]%s+(.*)")
         if name then table.insert(tasks, name) end
     end
     f:close()
 
-    if #tasks == 0 then print(green .. "All tasks done!" .. reset); break end
-    for i, t in ipairs(tasks) do print(bold .. i .. ")" .. reset .. " " .. t) end
-    print(dim .. "q) Quit" .. reset)
+    if #tasks == 0 then print(C.green .. "All tasks done!" .. C.reset); break end
+    for i, t in ipairs(tasks) do print(C.bold .. i .. ")" .. C.reset .. " " .. t) end
+    print(C.dim .. "q) Quit" .. C.reset)
 
-    io.write("\n" .. bold .. "Select task #: " .. reset)
+    io.write("\n" .. C.bold .. "Select task #: " .. C.reset)
     local choice = io.read()
     if choice == "q" then break end
     local idx = tonumber(choice)
     if idx and tasks[idx] then
         local selected = tasks[idx]
-        run_timer(DURATION, selected, accent)
+        run_timer(DURATION, selected, C.accent)
         update_log(filename, selected, "focus_hours") -- Simple default
-        print(dim .. "Log updated. Press Enter to continue..." .. reset)
+        print(C.dim .. "Log updated. Press Enter to continue..." .. C.reset)
         io.read()
     end
 end
