@@ -7,6 +7,23 @@ local C = require("ansi-colors")
 local POMO_INC = 0.42
 local DURATION = 25
 
+local function play_alert()
+    -- Try paplay with 80% volume
+    local res = os.execute("paplay --volume=52428 /usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga 2>/dev/null")
+    if res ~= 0 then
+        -- Try aplay
+        res = os.execute("aplay /usr/share/sounds/freedesktop/stereo/complete.oga 2>/dev/null")
+        if res ~= 0 then
+            -- Fallback to bell
+            for i=1,3 do
+                io.write("\a")
+                io.flush()
+                os.execute("sleep 0.2")
+            end
+        end
+    end
+end
+
 local function get_filename()
     return "content/daily/" .. os.date("%Y-%m-%d") .. ".md"
 end
@@ -33,6 +50,7 @@ local function run_timer(mins, label, color)
         seconds = seconds - 1
     end
     print("\n" .. C.green .. C.bold .. "✅ " .. label .. " Complete!" .. C.reset)
+    play_alert()
 end
 
 local function update_log(filename, task_name, metric)

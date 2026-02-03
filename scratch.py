@@ -28,7 +28,7 @@ def main():
     with open(filepath, 'a') as f:
         f.write(entry)
     
-    console.print(f"[bold green]Saved to Reflections.[/bold green]")
+    console.print(f"\n[bold {ACCENT}]✔ Site Updated.[/bold {ACCENT}] Thought appended to {os.path.basename(filepath)}.")
 
 if __name__ == "__main__":
     main()

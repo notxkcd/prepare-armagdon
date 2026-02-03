@@ -24,7 +24,8 @@ console = Console()
 
 def play_alert():
     try:
-        subprocess.run(["paplay", "/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"], check=True, stderr=subprocess.DEVNULL)
+        # Set volume to ~80% (65536 * 0.8 = 52428)
+        subprocess.run(["paplay", "--volume=52428", "/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"], check=True, stderr=subprocess.DEVNULL)
     except:
         try:
             subprocess.run(["aplay", "/usr/share/sounds/freedesktop/stereo/complete.oga"], check=True, stderr=subprocess.DEVNULL)
@@ -64,7 +65,7 @@ def parse_log(filepath):
         if header_match:
             current_section = header_match.group(1).strip()
         
-        task_match = re.match(r'^-\s+\[([ xX])\]\s+(\[[0-9]{{2}}:[0-9]{{2}}\])?\s*(.*)', line)
+        task_match = re.match(r'^-\s+\[([ xX])\]\s+(\[[0-9]{2}:[0-9]{2}\])?\s*(.*)', line)
         if task_match:
             raw_name = task_match.group(3).strip()
             clean_name = raw_name.replace("🍅", "").strip()
@@ -89,12 +90,15 @@ def update_file(filepath, task_name, metric, lines):
     
     for line in lines:
         if line.startswith(f"{metric}:"):
-            val = float(line.split(":")[1].strip())
-            line = f"{metric}: {round(val + POMO_INCREMENT, 2)}\n"
+            try:
+                val = float(line.split(":")[1].strip())
+                line = f"{metric}: {round(val + POMO_INCREMENT, 2)}\n"
+            except ValueError:
+                pass
         
         if task_name in line and not found_task:
-            if re.search(r'\[[0-9]{{2}}:[0-9]{{2}}\]', line):
-                line = re.sub(r'\[[0-9]{{2}}:[0-9]{{2}}\]', f'[{now_time}]', line)
+            if re.search(r'\[[0-9]{2}:[0-9]{2}\]', line):
+                line = re.sub(r'\[[0-9]{2}:[0-9]{2}\]', f'[{now_time}]', line)
             else:
                 line = line.replace("- [ ] ", f"- [ ] [{now_time}] ")
             line = line.rstrip() + " 🍅\n"
@@ -138,8 +142,8 @@ def run_timer(duration_mins, description, color):
     play_alert()
 
 def main():
+    filepath = get_today_file()
     while True:
-        filepath = get_today_file()
         metrics, tasks, lines = parse_log(filepath)
         display_dashboard(metrics, tasks)
         
@@ -154,7 +158,7 @@ def main():
                 run_timer(DURATION_MINS, f"{selected['name']} ({c+1}/{cycles})", ACCENT)
                 update_file(filepath, selected['name'], selected['category'], lines)
                 # Refresh data for potential multi-cycle updates
-                _, _, lines = parse_log(filepath)
+                metrics, tasks, lines = parse_log(filepath)
                 
                 if c < cycles - 1:
                     run_timer(BREAK_MINS, "Break", "blue")
@@ -166,6 +170,8 @@ def main():
         except (ValueError, IndexError):
             console.print("[red]Invalid choice.[/red]")
             time.sleep(1)
+    
+    console.print(f"\n[bold {ACCENT}]✔ Site Updated.[/bold {ACCENT}] Progress synced to {os.path.basename(filepath)}.")
 
 if __name__ == "__main__":
     main()

@@ -710,7 +710,10 @@ ul li::before {
 
 #search .pagefind-ui__search-input {
     font-family: 'Patrick Hand', cursive;
-    #peak-chart {
+    font-size: 1.2rem;
+}
+
+#peak-chart {
     height: 150px;
     max-width: 600px;
     margin: 2rem auto;

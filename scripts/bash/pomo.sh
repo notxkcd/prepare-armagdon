@@ -7,6 +7,22 @@ DATE=$(date +%Y-%m-%d)
 FILE="content/daily/$DATE.md"
 POMO_INC=0.42
 
+play_alert() {
+    # Try paplay with 80% volume
+    if paplay --volume=52428 /usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga 2>/dev/null; then
+        return
+    fi
+    # Try aplay
+    if aplay /usr/share/sounds/freedesktop/stereo/complete.oga 2>/dev/null; then
+        return
+    fi
+    # Fallback to bell
+    for i in {1..3}; do
+        echo -e "\a"
+        sleep 0.2
+    done
+}
+
 while true; do
     if [ ! -f "$FILE" ]; then echo "Log not found."; exit 1; fi
     clear
@@ -47,6 +63,7 @@ fi
         ((SEC--))
     done
     echo -e "\n✅ Done!"
+    play_alert
 
     # Update File
     NOW=$(date +%H:%M)
