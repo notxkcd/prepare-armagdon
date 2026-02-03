@@ -179,7 +179,17 @@ When a session finishes:
 
 ---
 
-## Part 9: Troubleshooting
+## Part 10: Quick Reference
+
+If you ever forget a command, simply run:
+```bash
+make help
+```
+This will print a list of all available shortcuts.
+
+---
+
+## Part 11: Troubleshooting
 
 **Q: My checkboxes aren't green!**
 A: Ensure the status in the frontmatter is set to "Complete". Also, check `status: "Pending"` doesn't override it.

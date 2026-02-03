@@ -1,8 +1,22 @@
 # Armagdon Prep - Command Shortcuts
 # This Makefile provides easy shortcuts for common site operations.
 
-# Default target: Start the local development server
-all: serve
+# Default target: Show help
+all: help
+
+# Show help for available commands
+help:
+	@echo "Armagdon Prep - Command Manual"
+	@echo "------------------------------"
+	@echo "make serve   - Start the local development server"
+	@echo "make build   - Build the final static site"
+	@echo "make log     - Create today's Daily Log"
+	@echo "make task    - Add a new task to today's log"
+	@echo "make note    - Create a new note (tech/essays/philosophy)"
+	@echo "make pomo    - Start a Pomodoro focus session"
+	@echo "make show    - Show today's status dashboard"
+	@echo "make backup  - Commit and push changes to GitHub"
+	@echo "make clean   - Remove build artifacts"
 
 # Start the Hugo development server (View at http://localhost:1313)
 serve:

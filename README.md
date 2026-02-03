@@ -4,7 +4,12 @@ This repository contains your personal accountability system, designed as a mini
 
 ## ⚡ Quick Start
 
-1.  **Log Today's Entry:**
+1.  **See All Commands:**
+    ```bash
+    make help
+    ```
+
+2.  **Log Today's Entry:**
     ```bash
     ./log-today.sh
     ```
