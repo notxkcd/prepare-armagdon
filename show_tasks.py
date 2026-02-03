@@ -2,6 +2,7 @@
 import os
 import re
 import sys
+import time
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
@@ -61,8 +62,10 @@ def parse_log(filepath):
     return metrics, tasks
 
 def main():
-    filepath = get_today_file()
-    metrics, tasks = parse_log(filepath)
+    with console.status("[bold green]Calculating today's progress...", spinner="earth"):
+        filepath = get_today_file()
+        metrics, tasks = parse_log(filepath)
+        time.sleep(0.8)  # Short pause to make the animation visible
     
     date_display = datetime.now().strftime("%A, %B %d, %Y")
     

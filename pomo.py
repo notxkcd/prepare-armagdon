@@ -143,11 +143,12 @@ def run_timer(duration_mins, description, color):
     play_alert() # Sound the alarm when done
 
 def main():
-    console.clear()
-    console.print(Panel(f"[bold {ACCENT}]Armagdon Prep[/bold {ACCENT}] - Integrated Pomodoro", box=box.ROUNDED))
+    with console.status("[bold green]Syncing with protocol...", spinner="earth"):
+        filepath = get_today_file()
+        tasks, original_lines = parse_log(filepath)
+        time.sleep(0.6)
     
-    filepath = get_today_file()
-    tasks, original_lines = parse_log(filepath)
+    console.clear()
     
     if not tasks:
         console.print("[bold red]❌ No tasks found in today's log.[/bold red]")
