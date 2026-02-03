@@ -1,0 +1,18 @@
+# Lua Script Shortcuts
+# Manual for the Lua version of the Armagdon Prep tools.
+
+all: help
+
+help:
+	@echo "Lua Script Manual"
+	@echo "-----------------"
+	@echo "make show  - Run the lua status dashboard"
+	@echo "make pomo  - Run the lua focus loop"
+
+# Run the status dashboard
+show:
+	./show_tasks.lua
+
+# Run the focus loop (Pomodoro)
+pomo:
+	./pomo.lua

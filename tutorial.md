@@ -189,7 +189,25 @@ This will print a list of all available shortcuts.
 
 ---
 
-## Part 11: Troubleshooting
+## Part 12: Learning Scripts (Bash & Lua)
+
+For educational purposes, equivalent versions of the system's core tools have been implemented in **Bash** and **Lua**. These are located in the `scripts/` directory.
+
+### 1. Bash Versions
+Navigate to `scripts/bash/` to see how the system can be built using standard Linux utilities like `grep`, `sed`, and `bc`.
+*   `make show` (Bash version)
+*   `make pomo` (Bash version)
+
+### 2. Lua Versions
+Navigate to `scripts/lua/` to explore a version built with a lightweight, embedded language known for its fast pattern matching and simple file I/O.
+*   `make show` (Lua version)
+*   `make pomo` (Lua version)
+
+These versions are focused on code readability and demonstrate different programming paradigms.
+
+---
+
+## Part 13: Troubleshooting
 
 **Q: My checkboxes aren't green!**
 A: Ensure the status in the frontmatter is set to "Complete". Also, check `status: "Pending"` doesn't override it.
