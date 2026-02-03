@@ -16,7 +16,13 @@ This repository contains your personal accountability system, designed as a mini
     ```
     *(Appends a checkbox to today's log)*
 
-3.  **View the Site:**
+3.  **Run Pomodoro:**
+    ```bash
+    make pomo
+    ```
+    *(Task-aware timer that auto-logs focus hours)*
+
+4.  **View the Site:**
     ```bash
     make serve
     ```
@@ -101,6 +107,15 @@ draft: false
 ---
 
 ```
+
+### D. The Pomodoro Timer (`make pomo`)
+**Action:** Launches a CLI-based task-aware timer.
+**Features:**
+*   **Task Selection:** Choose from your current day's protocol.
+*   **Auto-Update:** Automatically replaces default schedule times with your actual start time.
+*   **Auto-Log:** Increments focus/learning/physical hours by **0.42** per session.
+*   **Audio Alerts:** Sounds a system alarm when sessions or breaks end.
+*   **Visual Proof:** Appends a `🍅` to the selected task in your daily log.
 
 ## 5. How to Run the Site
 

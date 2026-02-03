@@ -147,7 +147,32 @@ Everything is text.
 
 ---
 
-## Part 7: Troubleshooting
+## Part 8: The Pomodoro System (Focus Execution)
+
+To bridge the gap between "planning" and "doing," the system includes a **Task-Aware Pomodoro Timer**.
+
+### 1. Start a Session
+Run this command in your terminal:
+```bash
+make pomo
+```
+
+### 2. How it works
+1.  **Task Selection:** The script scans your current Daily Log and presents a list of all your checkboxes (`- [ ]`).
+2.  **Focus Selection:** Type the number of the task you are about to work on.
+3.  **Dynamic Scheduling:** The script automatically finds that task in your log and replaces the default time (e.g., `[05:45]`) with your **actual start time**.
+4.  **The Timer:** A beautiful, theme-colored progress bar will appear. Each session is **25 minutes**.
+5.  **Multi-Cycle Mode:** If the task name contains "2 Hours," the script automatically sets up **4 sessions** with breaks in between.
+6.  **Audio Alerts:** A system alarm will sound when the timer reaches zero, signaling the start or end of a focus session/break.
+
+### 3. Automatic Logging
+When a session finishes:
+*   **Metric Update:** Your `focus_hours`, `learning_hours`, or `physical_hours` (detected automatically) will increment by **0.42** (25 minutes).
+*   **Visual Proof:** A `🍅` is appended to the task line in your Markdown file for every session you complete.
+
+---
+
+## Part 9: Troubleshooting
 
 **Q: My checkboxes aren't green!**
 A: Ensure the status in the frontmatter is set to "Complete". Also, check `status: "Pending"` doesn't override it.
