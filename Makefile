@@ -26,6 +26,10 @@ note:
 	read -p "Enter Section (tech/essays/philosophy): " SEC; \
 	./new-note.sh "$$TITLE" "$$SEC"
 
+# Start a 25-minute Pomodoro session (automatically updates today's focus_hours)
+pomo:
+	./pomo.sh
+
 # Clean up build artifacts and temporary files
 clean:
 	rm -rf public resources .hugo_build.lock

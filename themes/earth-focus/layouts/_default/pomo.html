@@ -1,0 +1,94 @@
+{{ define "main" }}
+<article class="pomo-container">
+    <header>
+        <h1>{{ .Title }}</h1>
+        <p class="meta">Silent concentration.</p>
+    </header>
+
+    <div class="timer-box">
+        <div id="timer-display">25:00</div>
+        <div class="timer-controls">
+            <button id="start-btn">Start</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+    </div>
+
+    <section class="pomo-info">
+        <h3>How to use:</h3>
+        <p>1. Start the timer here for a visual cues.<br>
+        2. <strong>Crucial:</strong> Use <code>make pomo</code> in your terminal to actually log the session to your daily file.</p>
+    </section>
+</article>
+
+<script>
+let timer;
+let timeLeft = 25 * 60;
+const display = document.getElementById('timer-display');
+const startBtn = document.getElementById('start-btn');
+
+function updateDisplay() {
+    let mins = Math.floor(timeLeft / 60);
+    let secs = timeLeft % 60;
+    display.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+startBtn.addEventListener('click', () => {
+    if (timer) {
+        clearInterval(timer);
+        timer = null;
+        startBtn.textContent = 'Start';
+    } else {
+        startBtn.textContent = 'Pause';
+        timer = setInterval(() => {
+            if (timeLeft > 0) {
+                timeLeft--;
+                updateDisplay();
+            } else {
+                clearInterval(timer);
+                alert('Session complete! Use "make pomo" to log it.');
+            }
+        }, 1000);
+    }
+});
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+    clearInterval(timer);
+    timer = null;
+    timeLeft = 25 * 60;
+    updateDisplay();
+    startBtn.textContent = 'Start';
+});
+</script>
+
+<style>
+.timer-box {
+    text-align: center;
+    margin: 4rem 0;
+    background: #f4f1ea;
+    padding: 3rem;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+}
+#timer-display {
+    font-size: 6rem;
+    font-weight: 700;
+    font-family: 'Patrick Hand', cursive;
+    color: var(--accent-color);
+    margin-bottom: 2rem;
+}
+.timer-controls button {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 0.5rem;
+}
+.timer-controls button:hover {
+    opacity: 0.9;
+}
+</style>
+{{ end }}
