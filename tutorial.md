@@ -26,7 +26,14 @@ make log
 This generates a file for today (e.g., `content/daily/2026-02-03.md`).
 **Note:** The file title will automatically include the day of the week (e.g., `Daily Log - 2026-02-03 (Tuesday)`).
 
-### 2. Track Real-Time (The Input)
+### 2. Check Your Progress
+At any time, run:
+```bash
+make show
+```
+This displays a beautiful dashboard in your terminal showing your metrics (hours) and which tasks are still pending for today.
+
+### 3. Track Real-Time (The Input)
 Open the generated file. You will see two critical sections:
 
 **A. The Metrics (Frontmatter)**

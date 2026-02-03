@@ -30,6 +30,10 @@ note:
 pomo:
 	python3 pomo.py
 
+# Show today's tasks and metrics in a beautiful terminal dashboard
+show:
+	python3 show_tasks.py
+
 # Clean up build artifacts and temporary files
 clean:
 	rm -rf public resources .hugo_build.lock

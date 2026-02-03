@@ -16,7 +16,13 @@ This repository contains your personal accountability system, designed as a mini
     ```
     *(Appends a checkbox to today's log)*
 
-3.  **Run Pomodoro:**
+3.  **Check Progress:**
+    ```bash
+    make show
+    ```
+    *(Displays today's tasks/metrics in the terminal)*
+
+4.  **Run Pomodoro:**
     ```bash
     make pomo
     ```
