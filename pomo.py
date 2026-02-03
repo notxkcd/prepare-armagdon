@@ -4,18 +4,31 @@ import re
 import time
 import sys
 from datetime import datetime
+from rich.console import Console
+from rich.table import Table
+from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
+from rich.panel import Panel
+from rich.live import Live
+from rich import box
 
 # Configuration
 DURATION_MINS = 25
 BREAK_MINS = 5
 POMO_INCREMENT = 0.42  # 25 mins in hours
 
+# Earthy Colors (matching the Hugo theme)
+ACCENT = "#556b2f"  # Muted Green
+TEXT = "#2d2a26"    # Soft Black
+PAPER = "#fcfbf9"   # Warm White
+
+console = Console()
+
 def get_today_file():
     date_str = datetime.now().strftime("%Y-%m-%d")
     path = f"content/daily/{date_str}.md"
     if not os.path.exists(path):
-        print(f"⚠️  Today's log not found: {path}")
-        print("Run 'make log' first.")
+        console.print(f"[bold red]⚠️  Today's log not found:[/bold red] {path}")
+        console.print("[yellow]Run 'make log' first.[/yellow]")
         sys.exit(1)
     return path
 
@@ -36,17 +49,21 @@ def parse_log(filepath):
         task_match = re.match(r'^-\s+\[[ xX]\]\s+(\[[0-9]{2}:[0-9]{2}\])?\s*(.*)', line)
         if task_match:
             raw_name = task_match.group(2).strip()
+            # Clean name from previous tomatoes for matching
+            clean_name = raw_name.replace("🍅", "").strip()
+            
             # Determine metric category
             category = "focus_hours"
-            if "Ruck" in raw_name or "Exercise" in raw_name:
+            if any(k in clean_name for k in ["Ruck", "Exercise", "Gym", "Physical"]):
                 category = "physical_hours"
-            elif "Interview" in current_section or "Programming" in raw_name:
+            elif any(k in current_section or k in clean_name for k in ["Interview", "Programming", "Study", "Learn"]):
                 category = "learning_hours"
             
             tasks.append({
-                "name": raw_name,
+                "name": clean_name,
                 "category": category,
-                "line": line.strip()
+                "line": line.strip(),
+                "section": current_section
             })
             
     return tasks, lines
@@ -55,24 +72,29 @@ def update_file(filepath, task_name, metric, lines):
     now_time = datetime.now().strftime("%H:%M")
     new_lines = []
     found_task = False
+    new_val = 0.0
     
     for line in lines:
         # 1. Update Metrics in Frontmatter
         if line.startswith(f"{metric}:"):
-            current_val = float(line.split(":")[1].strip())
-            new_val = round(current_val + POMO_INCREMENT, 2)
-            line = f"{metric}: {new_val}\n"
+            try:
+                current_val = float(line.split(":")[1].strip())
+                new_val = round(current_val + POMO_INCREMENT, 2)
+                line = f"{metric}: {new_val}\n"
+            except ValueError:
+                pass
         
         # 2. Update Task Line (Timestamp and Tomato)
+        # We use a loose match for the task name to handle existing tomatoes/timestamps
         if task_name in line and not found_task:
             # Replace or add timestamp [HH:MM]
-            if "[" in line and "]" in line and any(c.isdigit() for c in line.split(']')[0]):
+            if re.search(r'\[[0-9]{2}:[0-9]{2}\]', line):
                 line = re.sub(r'\[[0-9]{2}:[0-9]{2}\]', f'[{now_time}]', line)
             else:
                 line = line.replace("- [ ] ", f"- [ ] [{now_time}] ")
             
             # Append Tomato
-            line = line.strip() + " 🍅\n"
+            line = line.rstrip() + " 🍅\n"
             found_task = True
             
         new_lines.append(line)
@@ -81,53 +103,77 @@ def update_file(filepath, task_name, metric, lines):
         f.writelines(new_lines)
     return new_val
 
-def run_timer(duration_mins, label):
-    seconds = duration_mins * 60
-    while seconds > 0:
-        mins, secs = divmod(seconds, 60)
-        timer = f"{mins:02d}:{secs:02d}"
-        print(f"\r⏳ {label}: {timer} remaining...", end="")
-        time.sleep(1)
-        seconds -= 1
-    print("\n✅ Session Complete!")
+def run_timer(duration_mins, description, color):
+    total_seconds = duration_mins * 60
+    
+    with Progress(
+        TextColumn("[bold]{task.description}"),
+        BarColumn(bar_width=None, complete_style=color, finished_style=color),
+        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+        TimeRemainingColumn(),
+        console=console
+    ) as progress:
+        task = progress.add_task(description, total=total_seconds)
+        while not progress.finished:
+            progress.update(task, advance=1)
+            time.sleep(1)
 
 def main():
+    console.clear()
+    console.print(Panel(f"[bold {ACCENT}]Armagdon Prep[/bold {ACCENT}] - Integrated Pomodoro", box=box.ROUNDED))
+    
     filepath = get_today_file()
     tasks, original_lines = parse_log(filepath)
     
     if not tasks:
-        print("❌ No tasks found in today's log.")
+        console.print("[bold red]❌ No tasks found in today's log.[/bold red]")
         return
 
-    print("\n--- Armagdon Pomodoro ---")
+    table = Table(title="Today's Protocol", box=box.SIMPLE, header_style=f"bold {ACCENT}", border_style=ACCENT)
+    table.add_column("ID", justify="right", style="dim")
+    table.add_column("Task", ratio=1)
+    table.add_column("Category", style="italic")
+
     for i, t in enumerate(tasks):
-        print(f"{i+1}) {t['name']}")
+        table.add_row(str(i+1), t['name'], t['category'].replace('_', ' ').title())
+    
+    console.print(table)
     
     try:
-        choice = input("\nSelect task number (or 'q' to quit): ")
+        choice = console.input(f"\n[bold {ACCENT}]Select task number[/bold {ACCENT}] (or 'q' to quit): ")
         if choice.lower() == 'q': return
         idx = int(choice) - 1
         selected = tasks[idx]
     except (ValueError, IndexError):
-        print("Invalid selection.")
+        console.print("[bold red]Invalid selection.[/bold red]")
         return
 
     # Check for multi-cycle
     cycles = 4 if "2 Hours" in selected['name'] or "2 hours" in selected['name'] else 1
     
-    print(f"\n🚀 Starting {cycles} session(s) for: {selected['name']}")
+    console.print(f"\n[bold]Target:[/bold] {selected['name']}")
+    console.print(f"[bold]Metric:[/bold] {selected['category'].replace('_', ' ').title()}")
+    console.print(f"[bold]Cycles:[/bold] {cycles}\n")
     
     for c in range(cycles):
-        run_timer(DURATION_MINS, f"Session {c+1}/{cycles}")
+        label = f"Session {c+1}/{cycles}"
+        run_timer(DURATION_MINS, label, ACCENT)
+        
+        # Update file after every successful session
         new_val = update_file(filepath, selected['name'], selected['category'], original_lines)
         # Re-read lines for next iteration update
         with open(filepath, 'r') as f: original_lines = f.readlines()
         
-        if c < cycles - 1:
-            run_timer(BREAK_MINS, "Break")
-            input("\nPress Enter to start next session...")
+        console.print(f"\n[bold green]✅ Session Complete![/bold green]")
+        console.print(f"📝 {selected['category']} updated to [bold]{new_val}h[/bold]")
 
-    print(f"\n🏁 Finished. Today's {selected['category']} is now {new_val}h")
+        if c < cycles - 1:
+            console.print(f"\n[bold {ACCENT}]Starting Break...[/bold {ACCENT}]")
+            run_timer(BREAK_MINS, "Break", "blue")
+            console.print("\n[bold]Break finished.[/bold]")
+            input("Press Enter to start next session...")
+
+    console.print(Panel(f"[bold {ACCENT}]Protocol Satisfied.[/bold {ACCENT}]\nGo well.", box=box.DOUBLE))
 
 if __name__ == "__main__":
     main()
