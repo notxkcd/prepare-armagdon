@@ -177,6 +177,7 @@ ul li::before {
 .task-list-item input[type="checkbox"]:disabled:checked {
   border-color: var(--accent-color);
   background-color: rgba(85, 107, 47, 0.15); /* Light green fill */
+  color: #BAB86C;
   opacity: 1; /* Override default disabled opacity */
 }
 

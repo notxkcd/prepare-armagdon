@@ -27,7 +27,7 @@ serve:
 # Build the final static site for production (outputs to /public)
 build:
 	hugo --minify
-	npx pagefind --site public --output-path public/_pagefind
+	bun x pagefind --site public --output-path public/_pagefind
 
 # Create today's Daily Log using the ritual archetype
 log:
